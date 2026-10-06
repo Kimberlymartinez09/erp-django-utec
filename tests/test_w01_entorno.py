@@ -18,7 +18,7 @@ class PythonVersionTest(TestCase):
 class DjangoVersionTest(TestCase):
     def test_django_version_4_2(self):
         import django
-        self.assertEqual(django.VERSION[0], 4)
+        self.assertEqual(django.VERSION[0], 5)
         self.assertEqual(django.VERSION[1], 2)
 
 

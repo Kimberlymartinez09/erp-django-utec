@@ -7,7 +7,6 @@ de 5 apps del ERP, desplegado en Render.com con URL pública funcional
 y repositorio en GitHub con al menos 10 commits.
 
 ## HUs seleccionadas para este sprint
-
 | ID | Historia | Puntos | Estado |
 |---|---|---|---|
 | HU-E1-01 | Entorno portable USB | 3 | 🔄 En progreso |
@@ -18,7 +17,6 @@ y repositorio en GitHub con al menos 10 commits.
 **Total de puntos del sprint:** 10
 
 ## Sprint Backlog — Tareas técnicas W01
-
 | Tarea | Responsable | Estado | Horas est. |
 |---|---|---|---|
 | Configurar Python 3.11 embeddable en USB | Dev | ✅ | 0.5 h |
@@ -32,9 +30,31 @@ y repositorio en GitHub con al menos 10 commits.
 | product_backlog.md + sprint0_planning.md | Dev | ✅ | 0.5 h |
 | Primer commit en GitHub | Dev | ⏳ | 0.3 h |
 
+## Sprint Backlog — W02 (actualización de estados)
+
+| Tarea | Estado |
+|---|---|
+| Crear templates/base.html con Fable 5 AzulERP | ✅ |
+| Crear 5 plantillas index.html por app | ✅ |
+| Migrar vistas a views.py con render() | ✅ |
+| Configurar WhiteNoise y STATIC_ROOT | ✅ |
+| Crear core/settings_prod.py borrador | ✅ |
+| Actualizar requirements.txt (gunicorn, psycopg2) | ✅ |
+| Crear tests/test_w02_mvt.py — 12 tests OK | ✅ |
+| HU-E1-03 Repositorio GitHub: avance W02 commiteado | ✅ |
+
 ## Criterios de aceptación del Sprint 0
 - python manage.py check → 0 issues
 - http://127.0.0.1:8000/ → HTTP 200 (W01)
 - URL pública en Render → HTTP 200 (W03)
 - Repositorio con rama main + historial de commits
 - Ficha Schmelkes E1 completa (W03)
+
+## Avance W02
+- Repositorio Git inicializado y conectado a GitHub
+- Historial sincronizado con origin/main## Avance W02 
+
+## Avance W02
+- Repositorio Git inicializado y conectado a GitHub
+- Historial sincronizado con origin/main
+

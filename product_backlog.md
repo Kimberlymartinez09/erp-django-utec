@@ -6,7 +6,6 @@
 - **Scrum Master / Equipo:** [Tu nombre]
 
 ## Backlog completo (extracto W01–W06)
-
 | ID | Historia de Usuario | Espiral | Prioridad | Puntos |
 |---|---|---|---|---|
 | HU-E1-01 | Como dev, quiero un entorno portable en USB para trabajar en cualquier aula | E1 | Alta | 3 |
