@@ -24,6 +24,7 @@ media/
 # Sistema operativo
 Thumbs.db
 .DS_Store
+<<<<<<< HEAD
 
 # Herramientas portables e instaladores
 Git_Portable/
@@ -36,3 +37,5 @@ WorkSpace_ERP/
 # Windows
 System Volume Information/
 $RECYCLE.BIN/
+=======
+>>>>>>> 7352e3cd0c7356b7f69981afece91c66dcb0b81f
