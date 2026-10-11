@@ -36,3 +36,9 @@ WorkSpace_ERP/
 # Windows
 System Volume Information/
 $RECYCLE.BIN/
+.git_tmp/
+.git_old/
+
+.git_tmp/
+.git_old/
+.venv/

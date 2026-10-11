@@ -135,8 +135,8 @@ for /f %%h in ('git --git-dir="%USB_PATH%.git_tmp" rev-parse HEAD 2^>nul') do se
 if not "%TMP_HEAD%"=="%PC_HEAD%" goto :fallo_verif
 
 if exist "%USB_PATH%.git_old" rmdir /s /q "%USB_PATH%.git_old"
-if exist "%USB_PATH%.git" ren "%USB_PATH%.git" .git_old || goto :fallo_swap
-ren "%USB_PATH%.git_tmp" .git || goto :fallo_swap
+powershell -NoProfile -Command "$ErrorActionPreference='Stop'; if (Test-Path -LiteralPath '%USB_PATH%.git') { Rename-Item -LiteralPath '%USB_PATH%.git' -NewName '.git_old' -Force }; Rename-Item -LiteralPath '%USB_PATH%.git_tmp' -NewName '.git' -Force"
+if errorlevel 1 goto :fallo_swap
 attrib +h "%USB_PATH%.git" >nul 2>&1
 if exist "%USB_PATH%.git_old" rmdir /s /q "%USB_PATH%.git_old"
 
