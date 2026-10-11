@@ -1,8 +1,10 @@
 # core/views.py
-"""Vistas de la configuración central del ERP — W01."""
+"""Vistas principales del proyecto ERP — W02.
+
+Migración: HttpResponse → render() con templates y contexto.
+"""
 from django.shortcuts import render
 from django.urls import reverse
-
 
 
 def bienvenida(request):

@@ -81,7 +81,7 @@ class StaticFilesConfigTest(TestCase):
     def test_static_url_es_slash_static(self):
         """STATIC_URL debe ser '/static/'."""
         from django.conf import settings
-        self.assertEqual(settings.STATIC_URL, '/static/', 'STATIC_URL debe ser \'/static/\'.')
+        self.assertEqual(settings.STATIC_URL, '/static/')
 
     def test_static_root_configurado(self):
         """STATIC_ROOT debe estar definido."""

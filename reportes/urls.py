@@ -1,5 +1,5 @@
-# reportes/urls.py
-"""URLs de la app reportes — W02."""
+# productos/urls.py
+"""URLs de la app productos — W02."""
 from django.urls import path
 from . import views
 
