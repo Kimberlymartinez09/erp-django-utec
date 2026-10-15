@@ -42,3 +42,8 @@ $RECYCLE.BIN/
 .git_tmp/
 .git_old/
 .venv/
+Temp_Workspace_ERP_respaldos/.venv/
+Temp_Workspace_ERP_respaldos/
+
+.venv
+Temp_Workspace_ERP_respaldos/
