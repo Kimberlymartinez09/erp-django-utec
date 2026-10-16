@@ -1,6 +1,6 @@
-# Diagrama Entidad-Relación — ERP Django
-## Espiral 2 · Aprobado por: MC. Román Fernando López González
-## Fecha de aprobación: 15/10/2026
+﻿# Diagrama Entidad-RelaciÃ³n â€” ERP Django
+## Espiral 2 Â· Aprobado por: MC. RomÃ¡n Fernando LÃ³pez GonzÃ¡lez
+## Fecha de aprobaciÃ³n: 15/10/2026
 ## Belman Martinez Kimberly Fernanda
 
 ```mermaid
@@ -45,7 +45,6 @@ erDiagram
         bigint id PK
         bigint cliente_id FK
         datetime fecha
-        decimal total_calc "propiedad calculada"
     }
 
     DETALLE_VENTA {
@@ -85,25 +84,25 @@ erDiagram
 
 ## Cardinalidades
 
-| Relación | Tipo | Descripción |
+| RelaciÃ³n | Tipo | DescripciÃ³n |
 |---|---|---|
-| Categoria → Producto | 1:N obligatorio | Un producto siempre tiene categoría |
-| Proveedor → Producto | 1:N opcional | Un producto puede no tener proveedor |
-| Cliente → Venta | 1:N | Una venta siempre tiene cliente |
-| Cliente → Pedido | 1:N | Un pedido siempre tiene cliente |
-| Venta → DetalleVenta | 1:N obligatorio | Una venta tiene al menos 1 línea |
-| Producto → DetalleVenta | 1:N | Un producto puede aparecer en N ventas |
+| Categoria â†’ Producto | 1:N obligatorio | Un producto siempre tiene categorÃ­a |
+| Proveedor â†’ Producto | 1:N opcional | Un producto puede no tener proveedor |
+| Cliente â†’ Venta | 1:N | Una venta siempre tiene cliente |
+| Cliente â†’ Pedido | 1:N | Un pedido siempre tiene cliente |
+| Venta â†’ DetalleVenta | 1:N obligatorio | Una venta tiene al menos 1 lÃ­nea |
+| Producto â†’ DetalleVenta | 1:N | Un producto puede aparecer en N ventas |
 
-## Notas de diseño
+## Notas de diseÃ±o
 
-- `Venta.total` es una propiedad calculada, no un campo de BD (decisión D-04)
-- `DetalleVenta.precio_unitario` se almacena por integridad histórica (D-06)
+- `Venta.total` es una propiedad calculada, no un campo de BD (decisiÃ³n D-04)
+- `DetalleVenta.precio_unitario` se almacena por integridad histÃ³rica (D-06)
 - `ConfiguracionERP` es un singleton (siempre pk=1) (D-07)
 - `Pedido` se implementa en la Espiral 5 (W13-W15)
 
-## Firma de aprobación
+## Firma de aprobaciÃ³n
 
 | Rol | Nombre | Fecha | Observaciones |
 |---|---|---|---|
 | Desarrollador | Belman Martinez Kimberly Fernanda | | |
-| Asesor (PO) | MC. Román Fernando López González | | |
+| Asesor (PO) | MC. RomÃ¡n Fernando LÃ³pez GonzÃ¡lez | | |
