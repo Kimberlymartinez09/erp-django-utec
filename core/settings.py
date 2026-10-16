@@ -1,4 +1,5 @@
 # core/settings.py
+import sys
 import environ
 from pathlib import Path
 
@@ -80,7 +81,12 @@ STATIC_URL  = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 # STATICFILES_DIRS ≠ STATIC_ROOT (error frecuente)
 STATICFILES_DIRS = [BASE_DIR / 'static']  # fuentes adicionales
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# El manifiesto de WhiteNoise solo se usa en producción (requiere collectstatic)
+if DEBUG or 'test' in sys.argv:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # ── Archivos media ────────────────────────────────────────────────────────
 MEDIA_URL  = '/media/'
