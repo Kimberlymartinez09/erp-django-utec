@@ -8,7 +8,7 @@
 | **Nombre del ciclo** | Infraestructura y Configuración Base |
 | **Semanas** | W01 – W03 |
 | **Fecha de inicio** | 02/10/2026 |
-| **Fecha de cierre** | ___/___/_____ |
+| **Fecha de cierre** | 15/10/2026 |
 | **Responsable** | Kimberly Fernanda Belman Martinez |
 | **Asesor** | MC. Román Fernando López González |
 

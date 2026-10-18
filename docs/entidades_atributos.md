@@ -1,4 +1,4 @@
-# Entidades y Atributos — ERP Django
+c# Entidades y Atributos — ERP Django
 ## Espiral 2 · Modelo Entidad-Relación
 
 Total: 8 entidades.
