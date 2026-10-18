@@ -14,3 +14,4 @@ typing_extensions==4.16.0
 tzdata==2026.4
 wheel==0.48.0
 whitenoise==6.11.0
+Pillow
