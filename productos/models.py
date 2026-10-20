@@ -89,3 +89,33 @@ class Producto(models.Model):
 
     def __str__(self) -> str:
         return f"{self.nombre} (${self.precio:.2f})"
+    
+    # Agregar dentro de la clase Producto, después de los campos y antes de Meta:
+
+from django.core.exceptions import ValidationError   # ← agregar al inicio del archivo
+
+def clean(self) -> None:
+        """Validaciones de negocio cruzadas para Producto.
+
+        Ejecutadas por full_clean() (formularios y llamadas explícitas).
+        No se ejecutan con save() directo.
+
+        Raises:
+            ValidationError: si precio < 0 o stock < 0.
+        """
+        errors = {}
+
+        if self.precio is not None and self.precio < 0:
+            errors['precio'] = (
+                'El precio no puede ser negativo. '
+                f'Valor recibido: {self.precio}'
+            )
+
+        if self.stock is not None and self.stock < 0:
+            errors['stock'] = (
+                'El stock no puede ser negativo. '
+                f'Valor recibido: {self.stock}'
+            )
+
+        if errors:
+            raise ValidationError(errors)

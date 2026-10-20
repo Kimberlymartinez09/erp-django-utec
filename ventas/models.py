@@ -14,9 +14,11 @@ Decisiones de diseño aplicadas:
 """
 from decimal import Decimal
 
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 
-from clientes.models  import Cliente
+from clientes.models import Cliente
 from productos.models import Producto
 
 
@@ -35,14 +37,14 @@ class Venta(models.Model):
         related_name='ventas',
         verbose_name='Cliente'
     )
-    fecha   = models.DateTimeField(
+    fecha = models.DateTimeField(
         auto_now_add=True, verbose_name='Fecha'
     )
 
     class Meta:
-        verbose_name        = 'Venta'
+        verbose_name = 'Venta'
         verbose_name_plural = 'Ventas'
-        ordering            = ['-fecha']
+        ordering = ['-fecha']
 
     def __str__(self) -> str:
         return f"Venta #{self.pk} — {self.cliente} ({self.fecha:%d/%m/%Y})"
@@ -73,19 +75,19 @@ class DetalleVenta(models.Model):
     puede cambiar después de la venta; se necesita el histórico exacto.
     """
 
-    venta           = models.ForeignKey(
+    venta = models.ForeignKey(
         Venta,
         on_delete=models.CASCADE,      # borrar Venta → borrar sus líneas
         related_name='detalles',
         verbose_name='Venta'
     )
-    producto        = models.ForeignKey(
+    producto = models.ForeignKey(
         Producto,
         on_delete=models.PROTECT,      # D-05: no borrar producto con ventas
         related_name='detalles_venta',
         verbose_name='Producto'
     )
-    cantidad        = models.PositiveIntegerField(
+    cantidad = models.PositiveIntegerField(
         verbose_name='Cantidad'
     )
     precio_unitario = models.DecimalField(
@@ -96,7 +98,7 @@ class DetalleVenta(models.Model):
     )
 
     class Meta:
-        verbose_name        = 'Detalle de venta'
+        verbose_name = 'Detalle de venta'
         verbose_name_plural = 'Detalles de venta'
 
     def __str__(self) -> str:
@@ -106,6 +108,17 @@ class DetalleVenta(models.Model):
     def subtotal(self) -> Decimal:
         """Subtotal de la línea: cantidad × precio_unitario."""
         return self.precio_unitario * self.cantidad
+
+    def clean(self) -> None:
+        """Validación de negocio para línea de detalle.
+
+        Raises:
+            ValidationError: si cantidad < 1.
+        """
+        if self.cantidad is not None and self.cantidad < 1:
+            raise ValidationError(
+                {'cantidad': 'La cantidad debe ser al menos 1.'}
+            )
 
     def save(self, *args, **kwargs) -> None:
         """Captura el precio actual del producto si no se especificó.
@@ -141,34 +154,52 @@ class Pedido(models.Model):
         verbose_name='Número de pedido',
         help_text='Formato sugerido: PED-YYYY-NNNN'
     )
-    cliente       = models.ForeignKey(
+    cliente = models.ForeignKey(
         Cliente,
         on_delete=models.PROTECT,
         related_name='pedidos',
         verbose_name='Cliente'
     )
-    estado        = models.CharField(
+    estado = models.CharField(
         max_length=20,
         choices=ESTADO_CHOICES,
         default='pendiente',
         verbose_name='Estado'
     )
-    fecha_pedido  = models.DateTimeField(
+    fecha_pedido = models.DateTimeField(
         auto_now_add=True, verbose_name='Fecha del pedido'
     )
     fecha_entrega = models.DateField(
         null=True, blank=True, verbose_name='Fecha de entrega'
     )
-    total_pagado  = models.DecimalField(
-        max_digits=10, decimal_places=2,
-        null=True, blank=True,
+    total_pagado = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(Decimal('0.00'))],
         verbose_name='Total pagado'
     )
 
     class Meta:
-        verbose_name        = 'Pedido'
+        verbose_name = 'Pedido'
         verbose_name_plural = 'Pedidos'
-        ordering            = ['-fecha_pedido']
+        ordering = ['-fecha_pedido']
 
     def __str__(self) -> str:
         return f"{self.numero_pedido} — {self.cliente} [{self.get_estado_display()}]"
+
+    def clean(self) -> None:
+        """Valida que la fecha de entrega no sea anterior al pedido.
+
+        Raises:
+            ValidationError: si fecha_entrega < fecha_pedido.date().
+        """
+        if (self.fecha_entrega and self.fecha_pedido and
+                self.fecha_entrega < self.fecha_pedido.date()):
+            raise ValidationError({
+                'fecha_entrega': (
+                    'La fecha de entrega no puede ser anterior '
+                    'a la fecha del pedido.'
+                )
+            })
