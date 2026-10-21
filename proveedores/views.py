@@ -1,11 +1,18 @@
 # proveedores/views.py
-"""Vistas de la app proveedores — W07.
+"""Vistas de la app proveedores — W02 (inicio) + W07.
 
+Inicio: index (W02).
 Lectura: ListView y DetailView.
 """
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
 from .models import Proveedor
+
+
+def index(request):
+    """Página de inicio de proveedores (W02)."""
+    return render(request, 'proveedores/index.html')
 
 
 class ProveedorListView(ListView):

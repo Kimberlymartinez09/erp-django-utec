@@ -6,10 +6,8 @@ from . import views
 app_name = 'proveedores'
 
 urlpatterns = [
-    # Inicio (W02) — ahora apunta a la lista
-    path('inicio/',
-         views.ProveedorListView.as_view(),
-         name='inicio'),
+    # Inicio (W02)
+    path('inicio/', views.index, name='inicio'),
 
     # Lectura (W07)
     path('',

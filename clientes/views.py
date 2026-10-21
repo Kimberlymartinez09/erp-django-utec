@@ -1,12 +1,19 @@
 # clientes/views.py
-"""Vistas de la app clientes — W07.
+"""Vistas de la app clientes — W02 (inicio) + W07.
 
+Inicio: index (W02).
 Lectura: ListView y DetailView.
 Escritura (Create/Update/Delete): W08.
 """
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
 from .models import Cliente
+
+
+def index(request):
+    """Página de inicio de clientes (W02)."""
+    return render(request, 'clientes/index.html')
 
 
 class ClienteListView(ListView):

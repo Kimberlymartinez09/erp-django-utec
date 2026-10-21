@@ -1,12 +1,19 @@
 # productos/views.py
-"""Vistas de la app productos — W07.
+"""Vistas de la app productos — W02 (inicio) + W07.
 
+Inicio: index (W02).
 ListView y DetailView con select_related y paginación.
 Escritura (Create/Update/Delete) se implementa en W08.
 """
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
 from .models import Producto
+
+
+def index(request):
+    """Página de inicio de productos (W02)."""
+    return render(request, 'productos/index.html')
 
 
 class ProductoListView(ListView):

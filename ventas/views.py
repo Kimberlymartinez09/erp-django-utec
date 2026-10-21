@@ -1,12 +1,19 @@
 # ventas/views.py
-"""Vistas de la app ventas — W07.
+"""Vistas de la app ventas — W02 (inicio) + W07.
 
+Inicio: index (W02).
 Lectura: VentaListView y VentaDetailView.
 Escritura (crear_venta): W08.
 """
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
 from .models import Venta
+
+
+def index(request):
+    """Página de inicio de ventas (W02)."""
+    return render(request, 'ventas/index.html')
 
 
 class VentaListView(ListView):
