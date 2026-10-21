@@ -1,3 +1,7 @@
+## Sprint Goal
+
+Implementar el modelo de datos del ERP (Cliente, Proveedor, Categoría, Producto, Venta, DetalleVenta y Pedido) con migraciones, validadores y panel de administración funcional, verificado mediante pruebas automatizadas.
+
 ## Sprint 1 — Estado final W06
 
 | Tarea | Estado |
