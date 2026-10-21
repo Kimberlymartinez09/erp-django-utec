@@ -1,0 +1,247 @@
+===== git status 
+ M clientes/urls.py
+ M core/settings.py
+ M core/urls.py
+ D productos/templates/lista.html
+ M productos/urls.py
+ M proveedores/urls.py
+ M templates/base.html
+ M ventas/urls.py
+?? diagnostico.txt
+?? productos/templates/productos/lista.html
+?? tests/test_w07_vistas_lectura.py
+===== core\urls.py 
+# core/urls.py
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
+from django.views.generic import RedirectView
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+
+    # La plantilla base usa {% url 'inicio' %}: la raíz redirige a productos
+    path('', RedirectView.as_view(pattern_name='productos:lista'), name='inicio'),
+
+    path('clientes/',    include('clientes.urls')),
+    path('proveedores/', include('proveedores.urls')),
+    path('productos/',   include('productos.urls')),
+    path('ventas/',      include('ventas.urls')),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)===== clientes\urls.py 
+# clientes/urls.py
+"""URLs de la app clientes — W07 (Lista + Detalle)."""
+from django.urls import path
+from . import views
+
+app_name = 'clientes'
+
+urlpatterns = [
+    path('',
+         views.ClienteListView.as_view(),
+         name='lista'),
+    path('<int:cliente_id>/',
+         views.ClienteDetailView.as_view(),
+         name='detalle'),
+    # path('nuevo/',                   views.ClienteCreateView.as_view(),  name='crear'),
+    # path('<int:cliente_id>/editar/', views.ClienteUpdateView.as_view(),  name='editar'),
+    # path('<int:cliente_id>/eliminar/',views.ClienteDeleteView.as_view(), name='eliminar'),
+]===== productos\urls.py 
+# productos/urls.py
+"""URLs de la app productos — W07 (Lista + Detalle)."""
+from django.urls import path
+from . import views
+
+app_name = 'productos'
+
+urlpatterns = [
+    # Lectura (W07)
+    path('',
+         views.ProductoListView.as_view(),
+         name='lista'),
+    path('<int:producto_id>/',
+         views.ProductoDetailView.as_view(),
+         name='detalle'),
+    # Escritura (W08) — comentadas hasta implementarlas
+    # path('nuevo/',                    views.ProductoCreateView.as_view(), name='crear'),
+    # path('<int:producto_id>/editar/',  views.ProductoUpdateView.as_view(), name='editar'),
+    # path('<int:producto_id>/eliminar/',views.ProductoDeleteView.as_view(), name='eliminar'),
+]===== proveedores\urls.py 
+# proveedores/urls.py
+"""URLs de la app proveedores — W07."""
+from django.urls import path
+from . import views
+
+app_name = 'proveedores'
+
+urlpatterns = [
+    path('',
+         views.ProveedorListView.as_view(),
+         name='lista'),
+    path('<int:proveedor_id>/',
+         views.ProveedorDetailView.as_view(),
+         name='detalle'),
+    # path('nuevo/',                      views.ProveedorCreateView.as_view(),  name='crear'),
+    # path('<int:proveedor_id>/editar/',   views.ProveedorUpdateView.as_view(),  name='editar'),
+    # path('<int:proveedor_id>/eliminar/', views.ProveedorDeleteView.as_view(), name='eliminar'),
+]# ventas/urls.py
+"""URLs de la app ventas — W07."""
+from django.urls import path
+from . import views
+
+app_name = 'ventas'
+
+urlpatterns = [
+    path('',
+         views.VentaListView.as_view(),
+         name='lista'),
+    path('<int:venta_id>/',
+         views.VentaDetailView.as_view(),
+         name='detalle'),
+    # path('nueva/',                  views.crear_venta,                 name='crear'),
+    # path('<int:venta_id>/eliminar/',views.VentaDeleteView.as_view(),   name='eliminar'),
+]===== reportes 
+ El volumen de la unidad C no tiene etiqueta.
+ El n�mero de serie del volumen es: 5F29-45A5
+
+ Directorio de C:\Temp_Workspace_ERP\reportes
+
+20/10/2026  05:50 p. m.    <DIR>          .
+20/10/2026  07:21 p. m.    <DIR>          ..
+28/09/2026  05:41 p. m.                66 admin.py
+28/09/2026  05:41 p. m.               154 apps.py
+20/10/2026  05:50 p. m.    <DIR>          migrations
+28/09/2026  05:41 p. m.                60 models.py
+07/10/2026  04:52 p. m.    <DIR>          templates
+28/09/2026  05:41 p. m.                63 tests.py
+09/10/2026  06:03 p. m.               554 urls.py
+09/10/2026  06:01 p. m.               401 views.py
+28/09/2026  05:41 p. m.                 0 __init__.py
+20/10/2026  06:53 p. m.    <DIR>          __pycache__
+               7 archivos          1,298 bytes
+               5 dirs  321,010,647,040 bytes libres
+===== reportes\views.py 
+# reportes/views.py
+"""Vistas de la app reportes — W02 (placeholder)."""
+from django.shortcuts import render
+
+
+def index(request):
+    """Vista de índice de reportes."""
+    context = {
+        'titulo': 'Reportes',
+        'descripcion': 'Dashboard, KPIs y exportación de datos.',
+        'espiral': 'Espiral 7 · W19',
+    }
+    return render(request, 'reportes/index.html', context)===== test_w02_mvt.py 
+"""Suite de pruebas W02 — Patrón MVT: templates, vistas y estáticos.
+
+Ejecutar con:
+    python manage.py test tests.test_w02_mvt --verbosity=2
+
+Resultado esperado:
+    Ran 12 tests in X.XXXs
+    OK
+"""
+from django.test import TestCase
+from django.urls import reverse
+
+
+class TemplatesRenderTest(TestCase):
+    """Verifica que las vistas usan render() y los templates correctos."""
+
+    def test_bienvenida_usa_template_correcto(self):
+        """La vista de inicio debe renderizar bienvenida.html."""
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'bienvenida.html')
+
+    def test_bienvenida_extiende_base(self):
+        """La página de inicio debe extender base.html."""
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'base.html')
+
+    def test_productos_usa_template_correcto(self):
+        """La vista de productos debe usar productos/index.html."""
+        response = self.client.get(reverse('productos:inicio'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'productos/index.html')
+
+    def test_clientes_usa_template_correcto(self):
+        """La vista de clientes debe usar clientes/index.html."""
+        response = self.client.get(reverse('clientes:inicio'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'clientes/index.html')
+
+    def test_proveedores_usa_template_correcto(self):
+        """La vista de proveedores debe usar proveedores/index.html."""
+        response = self.client.get(reverse('proveedores:inicio'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'proveedores/index.html')
+
+    def test_ventas_usa_template_correcto(self):
+        """La vista de ventas debe usar ventas/index.html."""
+        response = self.client.get(reverse('ventas:inicio'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'ventas/index.html')
+
+    def test_reportes_usa_template_correcto(self):
+        """La vista de reportes debe usar reportes/index.html."""
+        response = self.client.get(reverse('reportes:inicio'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'reportes/index.html')
+
+
+class ContextoBienvenidaTest(TestCase):
+    """Verifica el contexto de la vista de bienvenida."""
+
+    def test_contexto_contiene_modulos(self):
+        """La vista de inicio debe pasar 'modulos' en el contexto."""
+        response = self.client.get('/')
+        self.assertIn('modulos', response.context,
+                      "El contexto debe incluir la lista 'modulos'")
+
+    def test_contexto_tiene_seis_modulos(self):
+        """El contexto debe contener exactamente 6 módulos."""
+        response = self.client.get('/')
+        modulos = response.context.get('modulos', [])
+        self.assertEqual(
+            len(modulos), 6,
+            f"Se esperaban 6 módulos, se encontraron {len(modulos)}"
+        )
+
+
+class StaticFilesConfigTest(TestCase):
+    """Verifica la configuración de archivos estáticos y WhiteNoise."""
+
+    def test_static_url_es_slash_static(self):
+        """STATIC_URL debe ser '/static/'."""
+        from django.conf import settings
+        self.assertEqual(settings.STATIC_URL, '/static/')
+
+    def test_static_root_configurado(self):
+        """STATIC_ROOT debe estar definido."""
+        from django.conf import settings
+        self.assertTrue(bool(settings.STATIC_ROOT),
+                        "STATIC_ROOT no está configurado")
+
+    def test_whitenoise_en_middleware(self):
+        """WhiteNoise debe estar en MIDDLEWARE."""
+        from django.conf import settings
+        self.assertIn(
+            'whitenoise.middleware.WhiteNoiseMiddleware',
+            settings.MIDDLEWARE,
+            "WhiteNoise no está en MIDDLEWARE"
+        )
+
+    def test_whitenoise_despues_de_security(self):
+        """WhiteNoise debe ir DESPUÉS de SecurityMiddleware."""
+        from django.conf import settings
+        m = settings.MIDDLEWARE
+        idx_sec  = m.index('django.middleware.security.SecurityMiddleware')
+        idx_wn   = m.index('whitenoise.middleware.WhiteNoiseMiddleware')
+        self.assertLess(idx_sec, idx_wn,
+                        "SecurityMiddleware debe ir ANTES que WhiteNoise")

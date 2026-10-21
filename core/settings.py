@@ -9,15 +9,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env(BASE_DIR / '.env')
 
-SECRET_KEY  = env('SECRET_KEY', default='dev-key-insegura-solo-para-desarrollo')
-DEBUG       = env('DEBUG', default=True)
+SECRET_KEY = env('SECRET_KEY', default='dev-key-insegura-solo-para-desarrollo')
+DEBUG = env('DEBUG', default=True)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
 
 # ── Apps instaladas ───────────────────────────────────────────────────────
-# core/settings.py — actualizar INSTALLED_APPS
 INSTALLED_APPS = [
     # Jazzmin PRIMERO — antes de django.contrib.admin
-    'jazzmin',                          # ← nueva línea, primera posición
+    'jazzmin',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -36,7 +35,6 @@ INSTALLED_APPS = [
     'reportes',
     'configuracion',
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,29 +76,35 @@ DATABASES = {
 
 # ── Internacionalización ──────────────────────────────────────────────────
 LANGUAGE_CODE = 'es-mx'
-TIME_ZONE     = 'America/Mexico_City'
-USE_I18N      = True
-USE_TZ        = True
+TIME_ZONE = 'America/Mexico_City'
+USE_I18N = True
+USE_TZ = True
 
 # ── Archivos estáticos ────────────────────────────────────────────────────
-STATIC_URL  = '/static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 # STATICFILES_DIRS ≠ STATIC_ROOT (error frecuente)
-STATICFILES_DIRS = [BASE_DIR / 'static']  # fuentes adicionales
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
+# STATICFILES_STORAGE fue eliminado en Django 5.1+; ahora se usa STORAGES.
 # El manifiesto de WhiteNoise solo se usa en producción (requiere collectstatic)
 if DEBUG or 'test' in sys.argv:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+    _static_backend = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 else:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    _static_backend = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {'BACKEND': _static_backend},
+}
 
 # ── Archivos media ────────────────────────────────────────────────────────
-MEDIA_URL  = '/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # ── Autenticación ─────────────────────────────────────────────────────────
-LOGIN_URL           = '/accounts/login/'
-LOGIN_REDIRECT_URL  = '/productos/'
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/productos/'
 LOGOUT_REDIRECT_URL = '/'
 
 # ── DRF ──────────────────────────────────────────────────────────────────
@@ -111,101 +115,98 @@ REST_FRAMEWORK = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# core/settings.py — agregar al final del archivo
 
-# ── JAZZMIN — Personalización del admin con Fable 5 AzulERP ───────────────
+# ── JAZZMIN — Personalización del admin ───────────────────────────────────
 JAZZMIN_SETTINGS = {
     # Identidad
-    'site_title':       'ERP Django',
-    'site_header':      'ERP UTEC Celaya',
-    'site_brand':       '📦 ERP Django',
-    'welcome_sign':     'Bienvenido al Sistema ERP · UTEC Celaya',
-    'copyright':        'MC. Román Fernando López González · UTEC Celaya',
+    'site_title': 'ERP Django',
+    'site_header': 'ERP UTEC Celaya',
+    'site_brand': '📦 ERP Django',
+    'welcome_sign': 'Bienvenido al Sistema ERP · UTEC Celaya',
+    'copyright': 'MC. Román Fernando López González · UTEC Celaya',
 
-    # Icono del sitio (usar emoji como fallback)
-    'site_icon':        None,
-    'site_logo':        None,    # ruta a logo en static/ (agregar en W11+)
+    'site_icon': None,
+    'site_logo': None,    # ruta a logo en static/ (agregar en W11+)
 
     # Búsqueda global en el admin
-    'search_model':     ['clientes.Cliente', 'productos.Producto'],
+    'search_model': ['clientes.Cliente', 'productos.Producto'],
 
-    # Menú superior (top navigation)
+    # Menú superior
     'topmenu_links': [
-        {'name': 'Inicio ERP',   'url': '/', 'new_window': False},
-        {'name': 'Productos',    'url': '/productos/'},
-        {'name': 'Clientes',     'url': '/clientes/'},
-        {'name': 'Ventas',       'url': '/ventas/'},
+        {'name': 'Inicio ERP', 'url': '/', 'new_window': False},
+        {'name': 'Productos',  'url': '/productos/'},
+        {'name': 'Clientes',   'url': '/clientes/'},
+        {'name': 'Ventas',     'url': '/ventas/'},
     ],
 
-    # Menú de usuario (avatar)
+    # Menú de usuario
     'usermenu_links': [
         {'name': 'Ver ERP', 'url': '/', 'new_window': False},
     ],
 
-    # Menú lateral: orden de apps y modelos
+    # Menú lateral
     'order_with_respect_to': [
         'clientes', 'proveedores', 'productos',
         'ventas', 'configuracion', 'auth',
     ],
 
-    # Iconos de Font Awesome para cada modelo
+    # Iconos Font Awesome
     'icons': {
-        'auth':                       'fas fa-users-cog',
-        'auth.user':                  'fas fa-user',
-        'auth.Group':                 'fas fa-users',
-        'clientes.Cliente':           'fas fa-user-tie',
-        'proveedores.Proveedor':      'fas fa-truck',
-        'productos.Categoria':        'fas fa-tags',
-        'productos.Producto':         'fas fa-box',
-        'ventas.Venta':               'fas fa-file-invoice-dollar',
-        'ventas.DetalleVenta':        'fas fa-list',
-        'ventas.Pedido':              'fas fa-shopping-cart',
+        'auth': 'fas fa-users-cog',
+        'auth.user': 'fas fa-user',
+        'auth.Group': 'fas fa-users',
+        'clientes.Cliente': 'fas fa-user-tie',
+        'proveedores.Proveedor': 'fas fa-truck',
+        'productos.Categoria': 'fas fa-tags',
+        'productos.Producto': 'fas fa-box',
+        'ventas.Venta': 'fas fa-file-invoice-dollar',
+        'ventas.DetalleVenta': 'fas fa-list',
+        'ventas.Pedido': 'fas fa-shopping-cart',
         'configuracion.ConfiguracionERP': 'fas fa-cogs',
     },
     'default_icon_parents': 'fas fa-folder',
     'default_icon_children': 'fas fa-circle',
 
     # Apariencia
-    'related_modal_active':     True,
-    'custom_css':               'erp_custom.css',   # archivo en static/
-    'show_sidebar':             True,
-    'navigation_expanded':      True,
-    'hide_apps':                [],
-    'hide_models':              [],
+    'related_modal_active': True,
+    'custom_css': 'erp_custom.css',   # archivo en static/
+    'show_sidebar': True,
+    'navigation_expanded': True,
+    'hide_apps': [],
+    'hide_models': [],
 
-    # UI tweaks
-    'changeform_format':        'horizontal_tabs',
-    'language_chooser':         False,
+    # UI
+    'changeform_format': 'horizontal_tabs',
+    'language_chooser': False,
 }
 
 JAZZMIN_UI_TWEAKS = {
-    'navbar_small_text':        False,
-    'footer_small_text':        False,
-    'body_small_text':          False,
-    'brand_small_text':         False,
-    'brand_colour':             'navbar-dark',
-    'accent':                   'accent-navy',
-    'navbar':                   'navbar-dark',
-    'no_navbar_border':         False,
-    'navbar_fixed':             True,
-    'layout_boxed':             False,
-    'footer_fixed':             False,
-    'sidebar_fixed':            True,
-    'sidebar':                  'sidebar-dark-navy',
-    'sidebar_nav_small_text':   False,
-    'sidebar_disable_expand':   False,
+    'navbar_small_text': False,
+    'footer_small_text': False,
+    'body_small_text': False,
+    'brand_small_text': False,
+    'brand_colour': 'navbar-dark',
+    'accent': 'accent-navy',
+    'navbar': 'navbar-dark',
+    'no_navbar_border': False,
+    'navbar_fixed': True,
+    'layout_boxed': False,
+    'footer_fixed': False,
+    'sidebar_fixed': True,
+    'sidebar': 'sidebar-dark-navy',
+    'sidebar_nav_small_text': False,
+    'sidebar_disable_expand': False,
     'sidebar_nav_child_indent': True,
     'sidebar_nav_compact_style': False,
     'sidebar_nav_legacy_style': False,
-    'sidebar_nav_flat_style':   False,
-    'theme':                    'default',
-    'dark_mode_theme':          None,
+    'sidebar_nav_flat_style': False,
+    'theme': 'default',
     'button_classes': {
-        'primary':   'btn-primary',
+        'primary': 'btn-primary',
         'secondary': 'btn-secondary',
-        'info':      'btn-info',
-        'warning':   'btn-warning',
-        'danger':    'btn-danger',
-        'success':   'btn-success',
+        'info': 'btn-info',
+        'warning': 'btn-warning',
+        'danger': 'btn-danger',
+        'success': 'btn-success',
     },
 }
