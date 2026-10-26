@@ -3,9 +3,12 @@
 Inicio: index (W02).
 Lectura: ListView y DetailView con select_related y paginación (W07).
 Escritura: Create, Update y Delete con LoginRequiredMixin (W08).
+Borrado: LoginRequiredMixin + PermissionRequiredMixin (W08, parte 4).
 """
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.views import redirect_to_login
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -87,13 +90,29 @@ class ProductoUpdateView(LoginRequiredMixin, UpdateView):
         return response
 
 
-class ProductoDeleteView(LoginRequiredMixin, DeleteView):
-    """Confirmación y borrado de un producto. Requiere POST con CSRF."""
+class ProductoDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """Confirmación y borrado de un producto. Requiere POST con CSRF.
 
-    model         = Producto
-    template_name = 'productos/producto_confirm_delete.html'
-    pk_url_kwarg  = 'producto_id'
-    success_url   = reverse_lazy('productos:lista')
+    LoginRequiredMixin SIEMPRE primero: anónimos van al login.
+    raise_exception=True: autenticados sin permiso reciben 403.
+    """
+
+    model              = Producto
+    template_name      = 'productos/producto_confirm_delete.html'
+    pk_url_kwarg       = 'producto_id'
+    success_url        = reverse_lazy('productos:lista')
+    permission_required = 'productos.delete_producto'
+    raise_exception    = True
+
+    def handle_no_permission(self):
+        """Anónimo → login (302); autenticado sin permiso → 403."""
+        if not self.request.user.is_authenticated:
+            return redirect_to_login(
+                self.request.get_full_path(),
+                self.get_login_url(),
+                self.get_redirect_field_name(),
+            )
+        raise PermissionDenied
 
     def form_valid(self, form):
         nombre   = self.object.nombre

@@ -1,7 +1,6 @@
 # core/urls.py
-"""Enrutador principal del ERP Django — W01."""
+"""Enrutador principal del ERP Django — W09."""
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -10,7 +9,9 @@ from . import views
 urlpatterns = [
     path('admin/',       admin.site.urls),
     path('',             views.bienvenida,             name='inicio'),
-    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
+    # Allauth (login / logout / registro)
+    path('accounts/',    include('allauth.urls')),     # ← agregar
+    # Apps del ERP
     path('clientes/',    include('clientes.urls',    namespace='clientes')),
     path('proveedores/', include('proveedores.urls', namespace='proveedores')),
     path('productos/',   include('productos.urls',   namespace='productos')),

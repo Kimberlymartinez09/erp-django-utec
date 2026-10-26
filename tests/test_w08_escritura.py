@@ -1,5 +1,6 @@
 """Pruebas de escritura (W08): Clientes, Productos, Proveedores y Ventas."""
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 
@@ -55,6 +56,16 @@ class ProductoEscrituraTest(TestCase):
         self.user = get_user_model().objects.create_user(
             username='userP', password='pass12345'
         )
+        # Usuario con permiso de borrado (equivale a un Gerente)
+        self.gerente = get_user_model().objects.create_user(
+            username='gerenteP', password='pass12345'
+        )
+        self.gerente.user_permissions.add(
+            Permission.objects.get(
+                content_type__app_label='productos',
+                codename='delete_producto',
+            )
+        )
         self.categoria = Categoria.objects.create(nombre='Categoría prueba')
         self.proveedor = Proveedor.objects.create(nombre='Prov prueba')
         self.producto = Producto.objects.create(
@@ -107,11 +118,20 @@ class ProductoEscrituraTest(TestCase):
         self.assertEqual(r.status_code, 302)
 
     def test_delete_elimina_producto(self):
-        self.client.force_login(self.user)
+        # Con permiso delete_producto el borrado funciona
+        self.client.force_login(self.gerente)
         pk = self.producto.pk
         r = self.client.post(reverse('productos:eliminar', args=[pk]))
         self.assertEqual(r.status_code, 302)
         self.assertFalse(Producto.objects.filter(pk=pk).exists())
+
+    def test_delete_sin_permiso_devuelve_403(self):
+        # Autenticado pero sin permiso: 403 (raise_exception=True)
+        self.client.force_login(self.user)
+        pk = self.producto.pk
+        r = self.client.post(reverse('productos:eliminar', args=[pk]))
+        self.assertEqual(r.status_code, 403)
+        self.assertTrue(Producto.objects.filter(pk=pk).exists())
 
 
 class ProveedorEscrituraTest(TestCase):
@@ -140,13 +160,29 @@ class VentaEscrituraTest(TestCase):
         self.user = get_user_model().objects.create_user(
             username='userV', password='pass12345'
         )
+        # Usuario con permiso add_venta (equivale a un Vendedor)
+        self.vendedor = get_user_model().objects.create_user(
+            username='vendedorV', password='pass12345'
+        )
+        self.vendedor.user_permissions.add(
+            Permission.objects.get(
+                content_type__app_label='ventas',
+                codename='add_venta',
+            )
+        )
 
     def test_crear_venta_sin_auth_redirige(self):
         r = self.client.get(reverse('ventas:crear'))
         self.assertEqual(r.status_code, 302)
 
+    def test_crear_venta_sin_permiso_devuelve_403(self):
+        # Autenticado pero sin add_venta: 403 (raise_exception=True)
+        self.client.force_login(self.user)
+        r = self.client.get(reverse('ventas:crear'))
+        self.assertEqual(r.status_code, 403)
+
     def test_post_valido_crea_venta(self):
         # Prueba de marcador: si tu versión original tenía una prueba real, conviene restaurarla.
-        self.client.force_login(self.user)
+        self.client.force_login(self.vendedor)
         r = self.client.get(reverse('ventas:crear'))
         self.assertIn(r.status_code, (200, 302))

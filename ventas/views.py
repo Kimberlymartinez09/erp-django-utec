@@ -2,11 +2,13 @@
 
 Inicio: index (W02).
 Lectura: VentaListView y VentaDetailView (W07).
-Escritura: crear_venta y VentaDeleteView (W08).
+Escritura: crear_venta (decoradores, W09) y VentaDeleteView (W08).
 """
-from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.views import redirect_to_login
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, DetailView, ListView
@@ -54,17 +56,20 @@ class VentaDetailView(DetailView):
         )
 
 
+@login_required
+@permission_required('ventas.add_venta', raise_exception=True)
 def crear_venta(request):
     """Crea un encabezado de venta con una línea de detalle.
+
+    Decoradores (se aplican de abajo hacia arriba):
+        @login_required           → verifica autenticación
+        @permission_required(...) → verifica permiso add_venta
 
     GET  → muestra los dos formularios vacíos.
     POST → valida ambos, guarda si son correctos, muestra errores si no.
 
     Nota: para múltiples líneas usar formsets (Espiral 5).
     """
-    if not request.user.is_authenticated:
-        return redirect(f"{settings.LOGIN_URL}?next={request.path}")
-
     venta_form   = VentaForm(request.POST or None)
     detalle_form = DetalleVentaForm(request.POST or None)
 
@@ -88,13 +93,23 @@ def crear_venta(request):
     })
 
 
-class VentaDeleteView(LoginRequiredMixin, DeleteView):
-    """Confirmación y borrado de una venta (y sus detalles en cascada)."""
+class VentaDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    model               = Venta
+    template_name       = 'ventas/eliminar.html'
+    pk_url_kwarg        = 'venta_id'
+    success_url         = reverse_lazy('ventas:lista')
+    permission_required = 'ventas.delete_venta'
+    raise_exception     = True
 
-    model         = Venta
-    template_name = 'ventas/eliminar.html'
-    pk_url_kwarg  = 'venta_id'
-    success_url   = reverse_lazy('ventas:lista')
+    def handle_no_permission(self):
+        """Anónimo → login (302); autenticado sin permiso → 403."""
+        if not self.request.user.is_authenticated:
+            return redirect_to_login(
+                self.request.get_full_path(),
+                self.get_login_url(),
+                self.get_redirect_field_name(),
+            )
+        raise PermissionDenied
 
     def form_valid(self, form):
         pk       = self.object.pk
