@@ -1,18 +1,17 @@
-# proveedores/views.py
-"""Vistas de la app proveedores — W02 (inicio) + W07.
+"""Vistas de la app proveedores — W02 (inicio) + W07 (lectura) + W08 (escritura).
 
 Inicio: index (W02).
-Lectura: ListView y DetailView.
+Lectura: ListView y DetailView (W07).
+Escritura: Create, Update y Delete con LoginRequiredMixin (W08).
 """
-from django.shortcuts import render
-from django.views.generic import DetailView, ListView
-# proveedores/views.py — agregar imports al inicio:
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView, DeleteView, DetailView, ListView, UpdateView
 )
+
 from .forms import ProveedorForm
 from .models import Proveedor
 
@@ -43,7 +42,7 @@ class ProveedorDetailView(DetailView):
     pk_url_kwarg        = 'proveedor_id'
 
     def get_context_data(self, **kwargs):
-        """Agrega los productos del proveedor al contexto."""
+        """Agrega los productos activos del proveedor al contexto."""
         ctx = super().get_context_data(**kwargs)
         ctx['productos'] = (
             self.object.productos
@@ -52,7 +51,8 @@ class ProveedorDetailView(DetailView):
             .order_by('nombre')
         )
         return ctx
-    
+
+
 class ProveedorCreateView(LoginRequiredMixin, CreateView):
     """Formulario para crear un proveedor."""
 

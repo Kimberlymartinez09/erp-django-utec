@@ -4,7 +4,15 @@
 Migración: HttpResponse → render() con templates y contexto.
 """
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
+
+
+def _url(nombre, respaldo='/'):
+    """Devuelve la URL de una ruta con nombre; si no existe, usa el respaldo."""
+    try:
+        return reverse(nombre)
+    except NoReverseMatch:
+        return respaldo
 
 
 def bienvenida(request):
@@ -20,31 +28,31 @@ def bienvenida(request):
         {
             'nombre': 'Productos',
             'icono': '📦',
-            'url': reverse('productos:inicio'),
+            'url': _url('productos:inicio', '/productos/'),
             'descripcion': 'Inventario, precios y stock',
         },
         {
             'nombre': 'Clientes',
             'icono': '👥',
-            'url': reverse('clientes:inicio'),
+            'url': _url('clientes:inicio', '/clientes/'),
             'descripcion': 'Cartera y gestión de clientes',
         },
         {
             'nombre': 'Proveedores',
             'icono': '🏭',
-            'url': reverse('proveedores:inicio'),
+            'url': _url('proveedores:inicio', '/proveedores/'),
             'descripcion': 'Red de proveedores',
         },
         {
             'nombre': 'Ventas',
             'icono': '💰',
-            'url': reverse('ventas:inicio'),
+            'url': _url('ventas:inicio', '/ventas/'),
             'descripcion': 'Pedidos, facturas y cobros',
         },
         {
             'nombre': 'Reportes',
             'icono': '📊',
-            'url': reverse('reportes:inicio'),
+            'url': _url('reportes:inicio', '/reportes/'),
             'descripcion': 'Dashboard y analítica',
         },
         {

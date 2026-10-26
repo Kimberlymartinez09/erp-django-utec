@@ -1,21 +1,18 @@
-# clientes/views.py
-"""Vistas de la app clientes — W02 (inicio) + W07.
+"""Vistas de la app clientes — W02 (inicio) + W07 (lectura) + W08 (escritura).
 
 Inicio: index (W02).
-Lectura: ListView y DetailView.
-Escritura (Create/Update/Delete): W08.
+Lectura: ListView y DetailView (W07).
+Escritura: Create, Update y Delete con LoginRequiredMixin (W08).
 """
-from django.shortcuts import render
-from django.views.generic import DetailView, ListView
-# clientes/views.py — agregar imports al inicio:
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView, DeleteView, DetailView, ListView, UpdateView
 )
-from .forms import ClienteForm
 
+from .forms import ClienteForm
 from .models import Cliente
 
 
@@ -45,14 +42,12 @@ class ClienteDetailView(DetailView):
     pk_url_kwarg        = 'cliente_id'
 
     def get_context_data(self, **kwargs):
-        """Agrega las ventas del cliente al contexto."""
+        """Agrega las últimas 10 ventas del cliente al contexto."""
         ctx = super().get_context_data(**kwargs)
-        ctx['ventas'] = (
-            self.object.ventas
-            .order_by('-fecha')[:10]   # últimas 10 ventas
-        )
+        ctx['ventas'] = self.object.ventas.order_by('-fecha')[:10]
         return ctx
-    
+
+
 class ClienteCreateView(LoginRequiredMixin, CreateView):
     """Formulario para crear un nuevo cliente."""
 

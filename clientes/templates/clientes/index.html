@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Clientes{% endblock %}
+{% block nav_clientes %}active{% endblock %}
+
+{% block content %}
+<div class="erp-page-title">
+    <h2>👥 Clientes</h2>
+</div>
+<p>Módulo de clientes: cartera y gestión de clientes.</p>
+<a href="{% url 'clientes:lista' %}" class="btn-erp-primary">Ver clientes</a>
+{% endblock %}

@@ -1,13 +1,9 @@
-# ventas/views.py
-"""Vistas de la app ventas — W02 (inicio) + W07.
+"""Vistas de la app ventas — W02 (inicio) + W07 (lectura) + W08 (escritura).
 
 Inicio: index (W02).
-Lectura: VentaListView y VentaDetailView.
-Escritura (crear_venta): W08.
+Lectura: VentaListView y VentaDetailView (W07).
+Escritura: crear_venta y VentaDeleteView (W08).
 """
-from django.shortcuts import render
-from django.views.generic import DetailView, ListView
-# ventas/views.py — agregar imports al inicio:
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,10 +11,8 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, DetailView, ListView
 
-from .forms  import DetalleVentaForm, VentaForm
+from .forms import DetalleVentaForm, VentaForm
 from .models import DetalleVenta, Venta
-
-from .models import Venta
 
 
 def index(request):
@@ -52,35 +46,33 @@ class VentaDetailView(DetailView):
     pk_url_kwarg        = 'venta_id'
 
     def get_queryset(self):
-        """Pre-carga cliente y prefetch líneas de detalle."""
+        """Pre-carga cliente y líneas de detalle."""
         return (
             Venta.objects
             .select_related('cliente')
             .prefetch_related('detalles__producto')
         )
-    
+
+
 def crear_venta(request):
     """Crea un encabezado de venta con una línea de detalle.
 
     GET  → muestra los dos formularios vacíos.
-    POST → valida ambos, guarda si correctos, muestra errores si no.
+    POST → valida ambos, guarda si son correctos, muestra errores si no.
 
-    Protección: redirige a login si no autenticado.
-    Nota: para múltiples líneas usar formsets (implementar en Espiral 5).
+    Nota: para múltiples líneas usar formsets (Espiral 5).
     """
     if not request.user.is_authenticated:
-        return redirect(
-            f"{settings.LOGIN_URL}?next={request.path}"
-        )
+        return redirect(f"{settings.LOGIN_URL}?next={request.path}")
 
     venta_form   = VentaForm(request.POST or None)
     detalle_form = DetalleVentaForm(request.POST or None)
 
     if request.method == 'POST':
         if venta_form.is_valid() and detalle_form.is_valid():
-            venta          = venta_form.save()
-            detalle        = detalle_form.save(commit=False)
-            detalle.venta  = venta
+            venta         = venta_form.save()
+            detalle       = detalle_form.save(commit=False)
+            detalle.venta = venta
             # precio_unitario se auto-captura en save() si es None
             detalle.save()
             messages.success(

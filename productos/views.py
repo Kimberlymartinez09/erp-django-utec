@@ -1,14 +1,18 @@
-"""Vistas de la app productos — W02 (inicio) + W07 + W08.
+"""Vistas de la app productos — W02 (inicio) + W07 (lectura) + W08 (escritura).
 
 Inicio: index (W02).
 Lectura: ListView y DetailView con select_related y paginación (W07).
-Escritura: ProductoCreateView con LoginRequiredMixin (W08).
+Escritura: Create, Update y Delete con LoginRequiredMixin (W08).
 """
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import (
+    CreateView, DeleteView, DetailView, ListView, UpdateView
+)
 
+from .forms import ProductoForm
 from .models import Producto
 
 
@@ -46,32 +50,17 @@ class ProductoDetailView(DetailView):
     def get_queryset(self):
         """Pre-carga FKs para evitar queries adicionales en el template."""
         return Producto.objects.select_related('categoria', 'proveedor')
-    
-# productos/views.py — agregar los imports al inicio del archivo:
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.views.generic import (
-    CreateView, DeleteView, DetailView, ListView, UpdateView
-)
-
-from .forms import ProductoForm
 
 
 class ProductoCreateView(LoginRequiredMixin, CreateView):
-    """Formulario para crear un nuevo producto.
-
-    LoginRequiredMixin PRIMERO en la herencia (obligatorio).
-    Redirige a /accounts/login/ si el usuario no está autenticado.
-    """
+    """Formulario para crear un producto. LoginRequiredMixin PRIMERO."""
 
     model         = Producto
     form_class    = ProductoForm
     template_name = 'productos/crear.html'
-    success_url   = reverse_lazy('productos:lista')  # reverse_lazy (no reverse)
+    success_url   = reverse_lazy('productos:lista')
 
     def form_valid(self, form):
-        """Agrega mensaje flash de éxito al guardar."""
         response = super().form_valid(form)
         messages.success(
             self.request,
@@ -85,7 +74,7 @@ class ProductoUpdateView(LoginRequiredMixin, UpdateView):
 
     model         = Producto
     form_class    = ProductoForm
-    template_name = 'productos/editar.html'
+    template_name = 'productos/producto_form.html'
     pk_url_kwarg  = 'producto_id'
     success_url   = reverse_lazy('productos:lista')
 
@@ -99,31 +88,15 @@ class ProductoUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class ProductoDeleteView(LoginRequiredMixin, DeleteView):
-    """Confirmación y borrado de un producto.
-
-    SOLO acepta POST. El template debe incluir
-    un formulario con {% csrf_token %} para evitar CSRF.
-    """
+    """Confirmación y borrado de un producto. Requiere POST con CSRF."""
 
     model         = Producto
-    template_name = 'productos/eliminar.html'
+    template_name = 'productos/producto_confirm_delete.html'
     pk_url_kwarg  = 'producto_id'
     success_url   = reverse_lazy('productos:lista')
 
     def form_valid(self, form):
         nombre   = self.object.nombre
         response = super().form_valid(form)
-        messages.success(
-            self.request,
-            f'Producto "{nombre}" eliminado.'
-        )
+        messages.success(self.request, f'Producto "{nombre}" eliminado.')
         return response
-
-
-class ProductoCreateView(LoginRequiredMixin, CreateView):
-    """Formulario para crear un producto. Requiere autenticación."""
-
-    model         = Producto
-    fields        = ['nombre', 'precio_unitario']
-    template_name = 'productos/producto_form.html'
-    success_url   = reverse_lazy('productos:lista')
