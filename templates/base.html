@@ -4,28 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#D6458C">
-    <title>{% block title %}ERP Kitty{% endblock %} · UTEC Celaya</title>
+    <title>{% block title %}Hello Kimberly ERP{% endblock %} · UTEC Celaya</title>
 
-    <!-- Google Fonts: Fredoka (títulos redondeados) + Nunito (texto) + JetBrains Mono -->
+    <!-- Google Fonts: Fredoka (títulos) + Nunito (texto) + Dancing Script (cursiva) + JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=Dancing+Script:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet">
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
-    <!-- Tema rosa estilo kitty (mismos nombres de variables que AzulERP) -->
     <style>
         /* TOKENS MODO DÍA */
         :root, [data-theme="light"] {
-            --clr-navy   : #D6458C;   /* rosa fuerte: barra, encabezados */
-            --clr-royal  : #F06CAB;   /* rosa medio: hover */
-            --clr-sky    : #FF8CC6;   /* rosa suave: foco */
-            --clr-ice    : #FFEAF4;   /* rosa pálido: filas alternas */
-            --clr-gold   : #E60026;   /* rojo del moño */
-            --clr-amber  : #FFC94D;   /* amarillo de la nariz */
+            --clr-navy   : #D6458C;
+            --clr-royal  : #F06CAB;
+            --clr-sky    : #FF8CC6;
+            --clr-ice    : #FFEAF4;
+            --clr-gold   : #E60026;
+            --clr-amber  : #FFC94D;
             --clr-cream  : #FFF6D6;
             --clr-bg     : #FFF0F7;
             --clr-surface: #FFFFFF;
@@ -38,6 +37,7 @@
             --dot        : #FFD3E8;
             --shadow-sm  : 0 2px 8px rgba(214,69,140,.14);
             --shadow-md  : 0 8px 22px rgba(214,69,140,.28);
+            --gem-opacity: .9;
         }
         /* TOKENS MODO NOCHE (ciruela) */
         [data-theme="dark"] {
@@ -59,7 +59,22 @@
             --dot        : #3B1A33;
             --shadow-sm  : 0 2px 8px rgba(0,0,0,.35);
             --shadow-md  : 0 8px 22px rgba(0,0,0,.45);
+            --gem-opacity: .7;
         }
+
+        /* MOÑO ROSA PASTEL (SVG) */
+        :root {
+            --bow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 48'%3E%3Cpath d='M32 24 C20 4 2 2 4 22 C6 40 22 40 32 24 Z' fill='%23FFC9E1' stroke='%23F28DB9' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='M32 24 C44 4 62 2 60 22 C58 40 42 40 32 24 Z' fill='%23FFC9E1' stroke='%23F28DB9' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='M26 12 C20 10 12 12 10 20' fill='none' stroke='%23FFFFFF' stroke-width='3' stroke-linecap='round' opacity='.8'/%3E%3Ccircle cx='32' cy='24' r='7' fill='%23FFB0D3' stroke='%23F28DB9' stroke-width='3'/%3E%3C/svg%3E");
+        }
+        .bow {
+            display: inline-block;
+            width: 1.7em; height: 1.3em;
+            vertical-align: -.3em;
+            background: var(--bow) center / contain no-repeat;
+            filter: drop-shadow(0 2px 2px rgba(184,50,111,.3));
+        }
+        .bow-lg { width: 2.6em; height: 2em; }
+
         /* BASE */
         *, *::before, *::after { box-sizing: border-box; }
         body {
@@ -82,8 +97,50 @@
             outline: 3px solid var(--clr-amber);
             outline-offset: 2px;
         }
+
+        /* BRILLITOS (gemas estilo pedrería) */
+        #gemLayer {
+            position: fixed; inset: 0;
+            z-index: 0; pointer-events: none;
+            overflow: hidden;
+            opacity: var(--gem-opacity);
+        }
+        .gem {
+            position: absolute;
+            --g: #F06CAB;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 30% 26%, #FFFFFF 0 7%, rgba(255,255,255,0) 9%),
+                radial-gradient(circle, rgba(255,255,255,0) 0 34%, rgba(255,255,255,.55) 35% 38%, rgba(255,255,255,0) 40%),
+                conic-gradient(from 15deg,
+                    color-mix(in srgb, var(--g) 50%, white),
+                    var(--g),
+                    color-mix(in srgb, var(--g) 80%, black),
+                    var(--g),
+                    color-mix(in srgb, var(--g) 50%, white),
+                    var(--g),
+                    color-mix(in srgb, var(--g) 80%, black),
+                    var(--g),
+                    color-mix(in srgb, var(--g) 50%, white));
+            box-shadow: inset 0 0 0 2px rgba(255,255,255,.5),
+                        0 2px 5px rgba(90,42,69,.3);
+            animation: twinkle 3.6s ease-in-out infinite;
+        }
+        .gem.heart {
+            border-radius: 0;
+            box-shadow: none;
+            filter: drop-shadow(0 2px 3px rgba(90,42,69,.35));
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3E%3Cpath d='M12 21 C-6 9 3 -3 12 5 C21 -3 30 9 12 21 Z'/%3E%3C/svg%3E") center / contain no-repeat;
+                    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3E%3Cpath d='M12 21 C-6 9 3 -3 12 5 C21 -3 30 9 12 21 Z'/%3E%3C/svg%3E") center / contain no-repeat;
+        }
+        @keyframes twinkle {
+            0%, 100% { filter: brightness(1); }
+            50%      { filter: brightness(1.28) saturate(1.15); }
+        }
+
         /* NAVBAR */
         .erp-navbar {
+            position: relative; z-index: 2;
             background: linear-gradient(90deg, var(--clr-navy), var(--clr-royal));
             border-bottom: 4px dashed #FFFFFF;
             padding: .65rem 1.5rem;
@@ -98,13 +155,14 @@
             text-decoration: none; letter-spacing: .02em;
             text-shadow: 0 2px 0 rgba(184,50,111,.45);
         }
-        .erp-brand span { color: rgba(255,255,255,.85); font-weight: 400; font-size: .75em; }
+        .erp-brand span.sub { color: rgba(255,255,255,.85); font-weight: 400; font-size: .75em; }
         .erp-nav-links { display: flex; align-items: center; gap: .25rem; flex-wrap: wrap; }
         .erp-nav-link {
             color: #FFFFFF !important;
-            font-family: 'Fredoka',sans-serif;
-            font-size: .95rem; font-weight: 500;
-            padding: .3rem .85rem; border-radius: 999px;
+            font-family: 'Dancing Script','Brush Script MT',cursive;
+            font-style: italic;
+            font-size: 1.3rem; font-weight: 600;
+            padding: .15rem .9rem; border-radius: 999px;
             text-decoration: none;
             transition: background .2s, color .2s;
         }
@@ -118,8 +176,10 @@
             cursor: pointer; transition: transform .2s;
         }
         .theme-toggle:hover { transform: rotate(20deg) scale(1.08); }
+
         /* CONTENIDO */
-        .erp-main { padding: 2rem 0; min-height: calc(100vh - 110px); }
+        .erp-main { position: relative; z-index: 1; padding: 2rem 0; min-height: calc(100vh - 110px); }
+
         /* CARDS */
         .erp-card {
             position: relative;
@@ -130,10 +190,13 @@
             transition: box-shadow .2s, transform .2s;
         }
         .erp-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
-        .erp-card::after {               /* moñito en la esquina */
-            content: "🎀";
-            position: absolute; top: -12px; right: 14px;
-            font-size: 1.35rem; transform: rotate(14deg);
+        .erp-card::after {               /* moño pastel grande en la esquina */
+            content: "";
+            position: absolute; top: -22px; right: 10px;
+            width: 58px; height: 44px;
+            background: var(--bow) center / contain no-repeat;
+            transform: rotate(14deg);
+            filter: drop-shadow(0 2px 2px rgba(184,50,111,.3));
             pointer-events: none;
         }
         .erp-card-header {
@@ -145,6 +208,7 @@
             font-size: 1.1rem; letter-spacing: .02em;
             margin: -1.5rem -1.5rem 1.5rem;
         }
+
         /* TABLAS */
         .erp-table {
             width: 100%; border-collapse: separate; border-spacing: 0;
@@ -167,6 +231,7 @@
             background: var(--clr-cream); color: var(--clr-gold);
             font-weight: 700; border-top: 2px solid var(--clr-gold);
         }
+
         /* BOTONES */
         .btn-erp-primary {
             background: var(--clr-navy); color: #FFF;
@@ -193,6 +258,7 @@
             cursor: pointer; text-decoration: none; display: inline-block;
         }
         .btn-erp-sm { padding: .25rem .8rem; font-size: .82rem; }
+
         /* FORMULARIOS */
         .erp-label {
             font-family: 'Fredoka',sans-serif;
@@ -209,6 +275,7 @@
             outline: none; border-color: var(--clr-navy);
             box-shadow: 0 0 0 4px rgba(255,140,198,.35);
         }
+
         /* BADGES */
         .badge-erp-active {
             background: rgba(26,122,74,.12); color: var(--clr-ok);
@@ -227,6 +294,7 @@
             font-size: .78rem; padding: .2rem .8rem;
             border-radius: 20px; font-weight: 700;
         }
+
         /* ALERTAS */
         .erp-alert-danger {
             background: rgba(192,57,43,.08); border: 1px solid rgba(192,57,43,.3);
@@ -243,6 +311,7 @@
             border-left: 6px solid var(--clr-ok); border-radius: 16px;
             padding: 1rem 1.25rem;
         }
+
         /* TÍTULO DE PÁGINA */
         .erp-page-title {
             display: flex; align-items: center; gap: 1rem;
@@ -253,14 +322,17 @@
             font-family: 'Fredoka',sans-serif;
             font-size: 1.7rem; color: var(--clr-title); margin: 0;
         }
+
         /* CÓDIGO */
         code, .mono {
             font-family: 'JetBrains Mono',Consolas,monospace;
             font-size: .85em; color: var(--clr-title);
             background: var(--clr-ice); padding: .1em .4em; border-radius: 6px;
         }
+
         /* FOOTER */
         .erp-footer {
+            position: relative; z-index: 2;
             background: linear-gradient(90deg, var(--clr-navy), var(--clr-royal));
             color: #FFFFFF;
             font-family: 'Fredoka',sans-serif;
@@ -268,7 +340,7 @@
             padding: .75rem; border-top: 4px dashed #FFFFFF;
         }
         @media (prefers-reduced-motion: reduce) {
-            * { transition: none !important; }
+            * { transition: none !important; animation: none !important; }
             .erp-card:hover { transform: none; }
         }
     </style>
@@ -277,9 +349,12 @@
 
 <body>
 
+<!-- CAPA DE BRILLITOS -->
+<div id="gemLayer" aria-hidden="true"></div>
+
 <!-- NAVBAR -->
 <nav class="erp-navbar">
-    <a class="erp-brand" href="/">🎀 ERP Kitty <span>· UTEC Celaya</span></a>
+    <a class="erp-brand" href="/"><span class="bow"></span> Hello Kimberly <span class="sub">· UTEC Celaya</span></a>
     <div class="erp-nav-links">
         <a href="/productos/" class="erp-nav-link {% block nav_productos %}{% endblock %}">Productos</a>
         <a href="/clientes/" class="erp-nav-link {% block nav_clientes %}{% endblock %}">Clientes</a>
@@ -298,7 +373,7 @@
 
 <!-- MENSAJES FLASH -->
 {% if messages %}
-<div class="container mt-3">
+<div class="container mt-3" style="position:relative;z-index:1;">
     {% for m in messages %}
     <div class="erp-alert-{% if m.tags == 'error' %}danger{% elif m.tags == 'success' %}success{% else %}info{% endif %} d-flex justify-content-between align-items-center mb-2"
          role="alert">
@@ -319,7 +394,7 @@
 
 <!-- FOOTER -->
 <footer class="erp-footer">
-    🎀 ERP Kitty · Django 4.2 LTS · UTEC Celaya · Espiral 1 🎀
+    <span class="bow"></span> Hello Kimberly ERP · Django 4.2 LTS · UTEC Celaya · Espiral 1 <span class="bow"></span>
 </footer>
 
 <!-- Bootstrap JS -->
@@ -344,6 +419,34 @@
             localStorage.setItem('erpTheme', next);
         });
     }
+})();
+</script>
+
+<!-- Brillitos de pedrería de fondo -->
+<script>
+(function () {
+    var layer = document.getElementById('gemLayer');
+    if (!layer) return;
+    var colors = ['#F0409A','#FF7EB9','#E60026','#B04BD8','#8E6CE0','#18B7D6',
+                  '#2E9BE6','#F59A1E','#FFC93C','#4CC24A','#FF9FC9','#D8A0F0'];
+    var seed = 20260;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    var count = window.innerWidth < 700 ? 38 : 85;
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < count; i++) {
+        var g = document.createElement('div');
+        var r = rnd();
+        var size = r < .12 ? 30 + rnd() * 18 : (r < .35 ? 20 + rnd() * 12 : 10 + rnd() * 10);
+        g.className = 'gem' + (rnd() < .14 ? ' heart' : '');
+        g.style.setProperty('--g', colors[Math.floor(rnd() * colors.length)]);
+        g.style.width  = size + 'px';
+        g.style.height = size + 'px';
+        g.style.left = (rnd() * 98) + '%';
+        g.style.top  = (rnd() * 98) + '%';
+        g.style.animationDelay = (rnd() * 4).toFixed(2) + 's';
+        frag.appendChild(g);
+    }
+    layer.appendChild(frag);
 })();
 </script>
 {% block extra_js %}{% endblock %}

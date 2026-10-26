@@ -1,34 +1,61 @@
 {% extends "base.html" %}
-{% block title %}Inicio{% endblock %}
+{% block title %}Bienvenida{% endblock %}
 
 {% block content %}
 <div class="text-center py-4">
     <h1 style="font-family:'Fredoka',sans-serif;font-weight:700;
-               color:var(--clr-title);font-size:2.6rem;">
-        🎀 ERP Kitty 🎀
+               color:var(--clr-title);font-size:2.8rem;">
+        <span class="bow bow-lg"></span> ¡Bienvenida a Hello Kimberly! <span class="bow bow-lg"></span>
     </h1>
-    <p style="color:var(--clr-muted);font-size:1.1rem;">
-        Sistema de gestión empresarial · UTEC Celaya · Espiral 1 W02
+    <p style="color:var(--clr-muted);font-size:1.15rem;">
+        {% if user.is_authenticated %}
+            Hola, <strong>{{ user.username }}</strong> 💖 ¿qué vamos a gestionar hoy?
+        {% else %}
+            Sistema de gestión empresarial · UTEC Celaya · Espiral 1 W02
+        {% endif %}
     </p>
     <div class="d-flex justify-content-center gap-2 mt-2 flex-wrap">
         <span class="badge-erp-gold">Django 4.2 LTS</span>
         <span class="badge-erp-gold">Python 3.11</span>
-        <span class="badge-erp-gold">Fable 5 KittyERP</span>
+        <span class="badge-erp-gold">Hello Kimberly ERP</span>
     </div>
 </div>
 
 <div class="row g-4 mt-2">
-    {% for m in modulos %}
     <div class="col-md-4">
-        <div class="erp-card text-center"
-             style="cursor:pointer;" onclick="window.location='{{ m.url }}'">
-            <div style="font-size:2.4rem;margin-bottom:.4rem;">{% cycle '🎀' '🌸' '💖' '⭐' '🍓' '🌷' %}</div>
-            <strong style="font-family:'Fredoka',sans-serif;font-size:1.2rem;color:var(--clr-title);">{{ m.nombre }}</strong>
-            <p style="color:var(--clr-muted);font-size:.9rem;margin:.3rem 0 0;">
-                {{ m.descripcion }}
-            </p>
+        <div class="erp-card text-center" style="cursor:pointer;" onclick="window.location='/productos/'">
+            <div style="font-size:2.4rem;margin-bottom:.4rem;">🌸</div>
+            <strong style="font-family:'Fredoka',sans-serif;font-size:1.2rem;color:var(--clr-title);">Productos</strong>
+            <p style="color:var(--clr-muted);font-size:.9rem;margin:.3rem 0 0;">Catálogo e inventario</p>
         </div>
     </div>
-    {% endfor %}
+    <div class="col-md-4">
+        <div class="erp-card text-center" style="cursor:pointer;" onclick="window.location='/clientes/'">
+            <div style="font-size:2.4rem;margin-bottom:.4rem;">💖</div>
+            <strong style="font-family:'Fredoka',sans-serif;font-size:1.2rem;color:var(--clr-title);">Clientes</strong>
+            <p style="color:var(--clr-muted);font-size:.9rem;margin:.3rem 0 0;">Directorio de clientes</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="erp-card text-center" style="cursor:pointer;" onclick="window.location='/proveedores/'">
+            <div style="font-size:2.4rem;margin-bottom:.4rem;">🍓</div>
+            <strong style="font-family:'Fredoka',sans-serif;font-size:1.2rem;color:var(--clr-title);">Proveedores</strong>
+            <p style="color:var(--clr-muted);font-size:.9rem;margin:.3rem 0 0;">Alta y control de proveedores</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="erp-card text-center" style="cursor:pointer;" onclick="window.location='/ventas/'">
+            <div style="font-size:2.4rem;margin-bottom:.4rem;">⭐</div>
+            <strong style="font-family:'Fredoka',sans-serif;font-size:1.2rem;color:var(--clr-title);">Ventas</strong>
+            <p style="color:var(--clr-muted);font-size:.9rem;margin:.3rem 0 0;">Registro y seguimiento de ventas</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="erp-card text-center" style="cursor:pointer;" onclick="window.location='/reportes/'">
+            <div style="font-size:2.4rem;margin-bottom:.4rem;">💎</div>
+            <strong style="font-family:'Fredoka',sans-serif;font-size:1.2rem;color:var(--clr-title);">Reportes</strong>
+            <p style="color:var(--clr-muted);font-size:.9rem;margin:.3rem 0 0;">Resúmenes e indicadores</p>
+        </div>
+    </div>
 </div>
 {% endblock %}
