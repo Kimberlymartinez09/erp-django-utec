@@ -3,141 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#0A2342">
-    <title>{% block title %}ERP Django{% endblock %} · UTEC Celaya</title>
+    <meta name="theme-color" content="#D6458C">
+    <title>{% block title %}ERP Kitty{% endblock %} · UTEC Celaya</title>
 
-    <!-- Google Fonts: Playfair Display + Inter + JetBrains Mono -->
+    <!-- Google Fonts: Fredoka (títulos redondeados) + Nunito (texto) + JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet">
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
-    <!-- Fable 5 AzulERP — Design System -->
+    <!-- Tema rosa estilo kitty (mismos nombres de variables que AzulERP) -->
     <style>
         /* TOKENS MODO DÍA */
         :root, [data-theme="light"] {
-            --clr-navy   : #0A2342;
-            --clr-royal  : #1B4F8A;
-            --clr-sky    : #4A90D9;
-            --clr-ice    : #E8F0FB;
-            --clr-gold   : #B8860B;
-            --clr-amber  : #D4A017;
-            --clr-cream  : #FDF8E8;
-            --clr-bg     : #F5F7FA;
+            --clr-navy   : #D6458C;   /* rosa fuerte: barra, encabezados */
+            --clr-royal  : #F06CAB;   /* rosa medio: hover */
+            --clr-sky    : #FF8CC6;   /* rosa suave: foco */
+            --clr-ice    : #FFEAF4;   /* rosa pálido: filas alternas */
+            --clr-gold   : #E60026;   /* rojo del moño */
+            --clr-amber  : #FFC94D;   /* amarillo de la nariz */
+            --clr-cream  : #FFF6D6;
+            --clr-bg     : #FFF0F7;
             --clr-surface: #FFFFFF;
-            --clr-text   : #1A1A2E;
-            --clr-muted  : #5A6A7E;
-            --clr-border : #C8D8EC;
+            --clr-text   : #5A2A45;
+            --clr-muted  : #8F5F7A;
+            --clr-border : #FFC2DE;
             --clr-danger : #C0392B;
             --clr-ok     : #1A7A4A;
-            --shadow-sm  : 0 1px 4px rgba(10,35,66,.08);
-            --shadow-md  : 0 4px 16px rgba(10,35,66,.12);
+            --clr-title  : #B8326F;
+            --dot        : #FFD3E8;
+            --shadow-sm  : 0 2px 8px rgba(214,69,140,.14);
+            --shadow-md  : 0 8px 22px rgba(214,69,140,.28);
         }
-        /* TOKENS MODO NOCHE */
+        /* TOKENS MODO NOCHE (ciruela) */
         [data-theme="dark"] {
-            --clr-navy   : #1E3A5F;
-            --clr-royal  : #2E5F9E;
-            --clr-sky    : #6BAEE8;
-            --clr-ice    : #1A2A3A;
-            --clr-gold   : #D4AF37;
-            --clr-amber  : #E8C547;
-            --clr-cream  : #2A2510;
-            --clr-bg     : #0D1B2A;
-            --clr-surface: #142033;
-            --clr-text   : #E2EAF4;
-            --clr-muted  : #8AA0B8;
-            --clr-border : #2A3F58;
-            --clr-danger : #E74C3C;
-            --clr-ok     : #2ECC71;
-            --shadow-sm  : 0 1px 4px rgba(0,0,0,.3);
-            --shadow-md  : 0 4px 16px rgba(0,0,0,.4);
+            --clr-navy   : #7A2E5C;
+            --clr-royal  : #A03C78;
+            --clr-sky    : #FF9ACB;
+            --clr-ice    : #3A1E33;
+            --clr-gold   : #FF6B8B;
+            --clr-amber  : #FFD54A;
+            --clr-cream  : #3A2F1A;
+            --clr-bg     : #2A1224;
+            --clr-surface: #3A1B31;
+            --clr-text   : #FFE6F2;
+            --clr-muted  : #D9A6C2;
+            --clr-border : #6B3556;
+            --clr-danger : #FF7B6B;
+            --clr-ok     : #5BE08F;
+            --clr-title  : #FF9ACB;
+            --dot        : #3B1A33;
+            --shadow-sm  : 0 2px 8px rgba(0,0,0,.35);
+            --shadow-md  : 0 8px 22px rgba(0,0,0,.45);
         }
         /* BASE */
         *, *::before, *::after { box-sizing: border-box; }
         body {
-            font-family: 'Inter','Segoe UI',sans-serif;
+            font-family: 'Nunito','Segoe UI',sans-serif;
             font-size: 15px;
-            background: var(--clr-bg);
+            background-color: var(--clr-bg);
+            background-image: radial-gradient(var(--dot) 2.5px, transparent 2.5px);
+            background-size: 30px 30px;
+            background-attachment: fixed;
             color: var(--clr-text);
             line-height: 1.6;
-            transition: background .25s, color .25s;
+            transition: background-color .25s, color .25s;
             margin: 0;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Fredoka','Nunito',sans-serif;
+            color: var(--clr-title);
+        }
+        :focus-visible {
+            outline: 3px solid var(--clr-amber);
+            outline-offset: 2px;
         }
         /* NAVBAR */
         .erp-navbar {
-            background: var(--clr-navy);
-            border-bottom: 3px solid var(--clr-gold);
+            background: linear-gradient(90deg, var(--clr-navy), var(--clr-royal));
+            border-bottom: 4px dashed #FFFFFF;
             padding: .65rem 1.5rem;
             display: flex; align-items: center;
             justify-content: space-between; flex-wrap: wrap; gap: .5rem;
             box-shadow: var(--shadow-md);
         }
         .erp-brand {
-            font-family: 'Playfair Display',Georgia,serif;
-            font-size: 1.3rem; font-weight: 700;
-            color: var(--clr-gold) !important;
-            text-decoration: none; letter-spacing: .04em;
+            font-family: 'Fredoka',sans-serif;
+            font-size: 1.45rem; font-weight: 700;
+            color: #FFFFFF !important;
+            text-decoration: none; letter-spacing: .02em;
+            text-shadow: 0 2px 0 rgba(184,50,111,.45);
         }
-        .erp-brand span { color: rgba(255,255,255,.7); font-weight: 300; font-size: .85em; }
+        .erp-brand span { color: rgba(255,255,255,.85); font-weight: 400; font-size: .75em; }
         .erp-nav-links { display: flex; align-items: center; gap: .25rem; flex-wrap: wrap; }
         .erp-nav-link {
-            color: rgba(255,255,255,.82) !important;
-            font-size: .88rem; font-weight: 500;
-            padding: .35rem .75rem; border-radius: 6px;
+            color: #FFFFFF !important;
+            font-family: 'Fredoka',sans-serif;
+            font-size: .95rem; font-weight: 500;
+            padding: .3rem .85rem; border-radius: 999px;
             text-decoration: none;
             transition: background .2s, color .2s;
         }
         .erp-nav-link:hover, .erp-nav-link.active {
-            background: var(--clr-royal); color: #FFF !important;
+            background: #FFFFFF; color: var(--clr-title) !important;
         }
         .theme-toggle {
-            background: var(--clr-gold); color: var(--clr-navy);
-            border: none; border-radius: 50%;
-            width: 32px; height: 32px; font-size: .9rem;
+            background: #FFFFFF; color: var(--clr-navy);
+            border: 2px solid var(--clr-gold); border-radius: 50%;
+            width: 34px; height: 34px; font-size: .95rem;
             cursor: pointer; transition: transform .2s;
         }
-        .theme-toggle:hover { transform: rotate(20deg); }
+        .theme-toggle:hover { transform: rotate(20deg) scale(1.08); }
         /* CONTENIDO */
         .erp-main { padding: 2rem 0; min-height: calc(100vh - 110px); }
         /* CARDS */
         .erp-card {
+            position: relative;
             background: var(--clr-surface);
-            border: 1px solid var(--clr-border);
-            border-radius: 12px; box-shadow: var(--shadow-sm);
+            border: 2.5px solid var(--clr-border);
+            border-radius: 26px; box-shadow: var(--shadow-sm);
             padding: 1.5rem; margin-bottom: 1.5rem;
-            transition: box-shadow .2s;
+            transition: box-shadow .2s, transform .2s;
         }
-        .erp-card:hover { box-shadow: var(--shadow-md); }
+        .erp-card:hover { box-shadow: var(--shadow-md); transform: translateY(-4px); }
+        .erp-card::after {               /* moñito en la esquina */
+            content: "🎀";
+            position: absolute; top: -12px; right: 14px;
+            font-size: 1.35rem; transform: rotate(14deg);
+            pointer-events: none;
+        }
         .erp-card-header {
             background: var(--clr-navy); color: #FFF;
-            border-radius: 10px 10px 0 0;
+            border-radius: 22px 22px 0 0;
             padding: .85rem 1.25rem;
-            border-left: 5px solid var(--clr-gold);
-            font-family: 'Playfair Display',serif;
-            font-size: 1.05rem; letter-spacing: .03em;
+            border-left: 6px solid var(--clr-gold);
+            font-family: 'Fredoka',sans-serif;
+            font-size: 1.1rem; letter-spacing: .02em;
             margin: -1.5rem -1.5rem 1.5rem;
         }
         /* TABLAS */
         .erp-table {
             width: 100%; border-collapse: separate; border-spacing: 0;
-            border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-sm);
+            border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-sm);
+            border: 2px solid var(--clr-border);
         }
         .erp-table thead th {
             background: var(--clr-navy); color: #FFF;
-            font-weight: 600; font-size: .82rem;
-            text-transform: uppercase; letter-spacing: .06em;
+            font-family: 'Fredoka',sans-serif;
+            font-weight: 500; font-size: .9rem; letter-spacing: .03em;
             padding: .75rem 1rem; border-bottom: 3px solid var(--clr-gold);
         }
         .erp-table tbody td {
             background: var(--clr-surface); padding: .65rem 1rem;
-            border-bottom: 1px solid var(--clr-border); font-size: .9rem;
+            border-bottom: 1px solid var(--clr-border); font-size: .92rem;
         }
         .erp-table tbody tr:nth-child(even) td { background: var(--clr-ice); }
-        .erp-table tbody tr:hover td { background: rgba(74,144,217,.08); }
+        .erp-table tbody tr:hover td { background: rgba(255,140,198,.2); }
         .erp-table tfoot td {
             background: var(--clr-cream); color: var(--clr-gold);
             font-weight: 700; border-top: 2px solid var(--clr-gold);
@@ -145,103 +170,106 @@
         /* BOTONES */
         .btn-erp-primary {
             background: var(--clr-navy); color: #FFF;
-            border: 2px solid var(--clr-gold); border-radius: 8px;
-            padding: .45rem 1.2rem; font-weight: 600; font-size: .88rem;
+            border: 2px solid var(--clr-gold); border-radius: 999px;
+            padding: .45rem 1.3rem; font-family: 'Fredoka',sans-serif;
+            font-weight: 500; font-size: .95rem;
             cursor: pointer; text-decoration: none; display: inline-block;
-            transition: background .2s, color .2s;
+            transition: background .2s, transform .15s;
         }
-        .btn-erp-primary:hover { background: var(--clr-gold); color: var(--clr-navy); }
+        .btn-erp-primary:hover { background: var(--clr-gold); color: #FFF; transform: scale(1.04); }
         .btn-erp-gold {
-            background: var(--clr-gold); color: var(--clr-navy);
-            border: 2px solid var(--clr-navy); border-radius: 8px;
-            padding: .45rem 1.2rem; font-weight: 700;
+            background: var(--clr-gold); color: #FFF;
+            border: 2px solid #FFFFFF; border-radius: 999px;
+            padding: .45rem 1.3rem; font-family: 'Fredoka',sans-serif; font-weight: 600;
+            box-shadow: 0 0 0 2px var(--clr-gold);
             cursor: pointer; text-decoration: none; display: inline-block;
-            transition: background .2s;
+            transition: background .2s, transform .15s;
         }
-        .btn-erp-gold:hover { background: var(--clr-amber); }
+        .btn-erp-gold:hover { background: var(--clr-amber); color: #5A2A45; transform: scale(1.04); }
         .btn-erp-danger {
             background: var(--clr-danger); color: #FFF; border: none;
-            border-radius: 8px; padding: .4rem 1rem;
-            font-weight: 600; font-size: .85rem;
+            border-radius: 999px; padding: .4rem 1.1rem;
+            font-family: 'Fredoka',sans-serif; font-weight: 500; font-size: .9rem;
             cursor: pointer; text-decoration: none; display: inline-block;
         }
-        .btn-erp-sm { padding: .25rem .7rem; font-size: .8rem; }
+        .btn-erp-sm { padding: .25rem .8rem; font-size: .82rem; }
         /* FORMULARIOS */
         .erp-label {
-            font-size: .83rem; font-weight: 600; color: var(--clr-muted);
-            text-transform: uppercase; letter-spacing: .05em;
+            font-family: 'Fredoka',sans-serif;
+            font-size: .9rem; font-weight: 500; color: var(--clr-muted);
             display: block; margin-bottom: .3rem;
         }
         .erp-input {
-            background: var(--clr-surface); border: 1.5px solid var(--clr-border);
-            border-radius: 8px; color: var(--clr-text);
-            padding: .5rem .85rem; width: 100%; font-size: .93rem;
+            background: var(--clr-surface); border: 2px solid var(--clr-border);
+            border-radius: 16px; color: var(--clr-text);
+            padding: .5rem .95rem; width: 100%; font-size: .95rem;
             transition: border-color .2s, box-shadow .2s;
         }
         .erp-input:focus {
-            outline: none; border-color: var(--clr-sky);
-            box-shadow: 0 0 0 3px rgba(74,144,217,.18);
+            outline: none; border-color: var(--clr-navy);
+            box-shadow: 0 0 0 4px rgba(255,140,198,.35);
         }
         /* BADGES */
         .badge-erp-active {
             background: rgba(26,122,74,.12); color: var(--clr-ok);
             border: 1px solid currentColor;
-            font-size: .75rem; padding: .2rem .6rem;
-            border-radius: 20px; font-weight: 600;
+            font-size: .78rem; padding: .2rem .7rem;
+            border-radius: 20px; font-weight: 700;
         }
         .badge-erp-inactive {
             background: rgba(192,57,43,.1); color: var(--clr-danger);
             border: 1px solid currentColor;
-            font-size: .75rem; padding: .2rem .6rem; border-radius: 20px;
+            font-size: .78rem; padding: .2rem .7rem; border-radius: 20px;
         }
         .badge-erp-gold {
-            background: var(--clr-cream); color: var(--clr-gold);
-            border: 1px solid var(--clr-gold);
-            font-size: .75rem; padding: .2rem .7rem;
+            background: var(--clr-surface); color: var(--clr-gold);
+            border: 2px solid var(--clr-navy);
+            font-size: .78rem; padding: .2rem .8rem;
             border-radius: 20px; font-weight: 700;
         }
         /* ALERTAS */
         .erp-alert-danger {
             background: rgba(192,57,43,.08); border: 1px solid rgba(192,57,43,.3);
-            border-left: 5px solid var(--clr-danger); border-radius: 8px;
+            border-left: 6px solid var(--clr-danger); border-radius: 16px;
             padding: 1rem 1.25rem;
         }
         .erp-alert-info {
             background: var(--clr-ice); border: 1px solid var(--clr-border);
-            border-left: 5px solid var(--clr-sky); border-radius: 8px;
+            border-left: 6px solid var(--clr-sky); border-radius: 16px;
             padding: 1rem 1.25rem;
         }
         .erp-alert-success {
             background: rgba(26,122,74,.08); border: 1px solid rgba(26,122,74,.3);
-            border-left: 5px solid var(--clr-ok); border-radius: 8px;
+            border-left: 6px solid var(--clr-ok); border-radius: 16px;
             padding: 1rem 1.25rem;
         }
         /* TÍTULO DE PÁGINA */
         .erp-page-title {
             display: flex; align-items: center; gap: 1rem;
             margin-bottom: 1.5rem; padding-bottom: .75rem;
-            border-bottom: 2px solid var(--clr-border);
+            border-bottom: 3px dotted var(--clr-sky);
         }
         .erp-page-title h2 {
-            font-family: 'Playfair Display',serif;
-            font-size: 1.6rem; color: var(--clr-navy); margin: 0;
+            font-family: 'Fredoka',sans-serif;
+            font-size: 1.7rem; color: var(--clr-title); margin: 0;
         }
-        [data-theme="dark"] .erp-page-title h2 { color: var(--clr-sky); }
         /* CÓDIGO */
         code, .mono {
             font-family: 'JetBrains Mono',Consolas,monospace;
-            font-size: .85em; color: var(--clr-royal);
-            background: var(--clr-ice); padding: .1em .4em; border-radius: 4px;
-        }
-        [data-theme="dark"] code,
-        [data-theme="dark"] .mono {
-            color: var(--clr-sky); background: rgba(74,144,217,.12);
+            font-size: .85em; color: var(--clr-title);
+            background: var(--clr-ice); padding: .1em .4em; border-radius: 6px;
         }
         /* FOOTER */
         .erp-footer {
-            background: var(--clr-navy); color: rgba(255,255,255,.6);
-            text-align: center; font-size: .78rem;
-            padding: .75rem; border-top: 2px solid var(--clr-gold);
+            background: linear-gradient(90deg, var(--clr-navy), var(--clr-royal));
+            color: #FFFFFF;
+            font-family: 'Fredoka',sans-serif;
+            text-align: center; font-size: .85rem;
+            padding: .75rem; border-top: 4px dashed #FFFFFF;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; }
+            .erp-card:hover { transform: none; }
         }
     </style>
     {% block extra_css %}{% endblock %}
@@ -251,7 +279,7 @@
 
 <!-- NAVBAR -->
 <nav class="erp-navbar">
-    <a class="erp-brand" href="/">📦 ERP Django <span>· UTEC Celaya</span></a>
+    <a class="erp-brand" href="/">🎀 ERP Kitty <span>· UTEC Celaya</span></a>
     <div class="erp-nav-links">
         <a href="/productos/" class="erp-nav-link {% block nav_productos %}{% endblock %}">Productos</a>
         <a href="/clientes/" class="erp-nav-link {% block nav_clientes %}{% endblock %}">Clientes</a>
@@ -291,7 +319,7 @@
 
 <!-- FOOTER -->
 <footer class="erp-footer">
-    ERP Django · Django 4.2 LTS · Fable 5 AzulERP · UTEC Celaya · Espiral 1
+    🎀 ERP Kitty · Django 4.2 LTS · UTEC Celaya · Espiral 1 🎀
 </footer>
 
 <!-- Bootstrap JS -->
