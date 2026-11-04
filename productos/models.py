@@ -1,16 +1,13 @@
 # productos/models.py
-"""Modelos de la app productos — Espiral 2 W05.
-
-Orden de implementación:
-  1. Categoria  (sin FK)
-  2. Producto   (FK → Categoria, FK → Proveedor)  ← Parte 3
-"""
+"""Modelos de la app productos — Espiral 2 W05, actualizado en W11 (imagen)."""
 from decimal import Decimal
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 
 from proveedores.models import Proveedor
+from .validators import validar_imagen_producto
 
 
 class Categoria(models.Model):
@@ -36,14 +33,19 @@ class Categoria(models.Model):
     def __str__(self) -> str:
         return self.nombre
 
-# Agregar después de la clase Categoria en productos/models.py
 
 class Producto(models.Model):
-    """Artículo del inventario del ERP.
+    """Producto del catálogo.
 
-    Decisiones de diseño aplicadas:
-        D-01: categoria usa on_delete=PROTECT.
-        D-02: proveedor usa on_delete=SET_NULL (puede ser null).
+    Atributos:
+        nombre:    Nombre del producto.
+        precio:    Precio unitario, no negativo.
+        stock:     Unidades disponibles, no negativas.
+        categoria: Categoría (no se puede borrar si tiene productos).
+        proveedor: Proveedor opcional.
+        activo:    Indica si el producto se muestra en el catálogo.
+        imagen:    Imagen opcional del producto (W11).
+        creado:    Fecha de registro.
     """
 
     nombre    = models.CharField(
@@ -63,13 +65,13 @@ class Producto(models.Model):
     )
     categoria = models.ForeignKey(
         Categoria,
-        on_delete=models.PROTECT,          # D-01: no borrar categoría con productos
+        on_delete=models.PROTECT,          # no borrar categoría con productos
         related_name='productos',
         verbose_name='Categoría'
     )
     proveedor = models.ForeignKey(
         Proveedor,
-        on_delete=models.SET_NULL,         # D-02: producto puede quedar sin proveedor
+        on_delete=models.SET_NULL,         # el producto puede quedar sin proveedor
         null=True,
         blank=True,
         related_name='productos',
@@ -77,6 +79,14 @@ class Producto(models.Model):
     )
     activo    = models.BooleanField(
         default=True, verbose_name='Activo'
+    )
+    imagen    = models.ImageField(
+        upload_to='productos/',            # subcarpeta dentro de MEDIA_ROOT
+        null=True,
+        blank=True,
+        verbose_name='Imagen del producto',
+        help_text='Formatos permitidos: JPEG, PNG, WEBP. Máximo 5 MB.',
+        validators=[validar_imagen_producto],
     )
     creado    = models.DateTimeField(
         auto_now_add=True, verbose_name='Fecha de registro'
@@ -89,12 +99,8 @@ class Producto(models.Model):
 
     def __str__(self) -> str:
         return f"{self.nombre} (${self.precio:.2f})"
-    
-    # Agregar dentro de la clase Producto, después de los campos y antes de Meta:
 
-from django.core.exceptions import ValidationError   # ← agregar al inicio del archivo
-
-def clean(self) -> None:
+    def clean(self) -> None:
         """Validaciones de negocio cruzadas para Producto.
 
         Ejecutadas por full_clean() (formularios y llamadas explícitas).
