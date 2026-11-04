@@ -1,0 +1,37 @@
+[33mcbcef60[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Tema rosa estilo kitty
+[33m80bde6d[m Sprint 2 CIERRE [M3]: allauth + RBAC + 100 tests OK + Ficha E3
+[33m60cc4ba[m Sprint 2 W09: allauth + crear_grupos + PermissionRequired + 100 tests OK
+[33m77d04ae[m Sprint 2 W08: CRUD completo + LoginRequired + messages + 90 tests OK
+[33m0cac281[m Sprint 2 W08: forms.py + Create/Update/Delete views + 12
+[33m0db2829[m Sprint 2 W07: ListView+DetailView x4 + 8 templates + 78 tests OK
+[33madf74ff[m Sprint 2 W07: ListView+DetailView x4 + 8 templates + 78 tests OK
+[33mb6ca6fb[m Sprint 2 W07: 8 vistas CBV + 8 templates Fable5 AzulERP
+[33mde91891[m Sprint 1 CIERRE [M2]: Jazzmin + clean() + 66 tests OK + Ficha Schmelkes E2
+[33mf4f6061[m Sprint 1 W06: clean() + Jazzmin + 66 tests OK [pre-M2]
+[33m3f08ad5[m Agregar Pillow a requirements
+[33m925b105[m Agregar .gitattributes y app proveedores
+[33mc348438[m Sprint 1 W05: 8 modelos Django + migraciones aplicadas
+[33m0dbb8a3[m Sprint 1 W04: diagrama ER + decisiones diseno + tests OK
+[33m4a23528[m Sprint 1 W04: HUs E2-01 a E2-08 en el product backlog
+[33m38c0cf5[m Sprint 1 W04: diagrama ER + decisiones de diseno + 38 tests OK
+[33mb8b24c8[m Sprint 0 W03: archivos de despliegue y tests
+[33m16b28ed[m Sprint 0 W03: archivos de despliegue y requirements
+[33mac5d323[m Sprint 0 W03: archivos de despliegue y requirements
+[33ma58b613[m Sprint 0 W03: settings_prod + Procfile + Dockerfile + render.yaml
+[33m6059f40[m Une historial local con GitHub
+[33m35c0b17[m Ajusta .gitignore y finalizar_sesion.bat
+[33mdc57e8b[m Sprint 0 W03: Docker, render.yaml y ajustes de settings, urls y tests
+[33mfd13a22[m Actualiza scripts de sesion con respaldo seguro del historial
+[33md8e90df[m Merge con historial remoto de GitHub
+[33ma9219ba[m Sprint 0 W02 CIERRE: MVT completo + Fable5 + WhiteNoise + 23 tests OK
+[33me0e1a92[m Sprint 0 W02: render() + templates Fable5 AzulERP x6 vistas
+[33m9a4c7de[m Sprint 0 W01: suite de tests de entorno (11 tests OK)
+[33m899fbfd[m Sprint 0 W01: entorno portable + proyecto Django base + 5 apps
+[33m9e71896[m Sprint 0 W02 CIERRE: MVT completo + Fable5 + WhiteNoise + 23 tests OK
+[33md2ee473[m Sprint 0 W02: render() + templates Fable5 AzulERP x6 vistas
+[33md50544f[m Sprint 0 W01: suite de tests de entorno (11 tests OK)
+[33m34b01a1[m Sprint 0 W01: entorno portable + proyecto Django base + 5 apps
+[33m7352e3c[m Sprint 0 CIERRE [M1]: agrega retrospectiva del sprint
+[33m995316c[m Agrega instrucciones de inicio al README
+[33m2fd13ab[m Agrega README con instrucciones de inicio
+[33m4bc150c[m Sprint 0 W01: entorno portable + proyecto Django base + 5 apps
