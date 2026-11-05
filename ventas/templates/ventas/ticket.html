@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket #{{ venta.pk }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            width: 300px;
+            margin: 0 auto;
+            padding: 10px;
+            color: #000;
+            background: #fff;
+        }
+        h2, p { text-align: center; margin: 4px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        th, td { padding: 3px 0; text-align: left; }
+        .derecha { text-align: right; }
+        .linea { border-top: 1px dashed #000; margin: 8px 0; }
+        .total { font-weight: bold; font-size: 15px; }
+        .acciones { text-align: center; margin-top: 16px; }
+        @media print {
+            .acciones { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <h2>ERP Django</h2>
+    <p>Ticket de venta</p>
+    <p>Venta #{{ venta.pk }}</p>
+    <p>{{ venta.fecha|date:"d/m/Y H:i" }}</p>
+    <p>Cliente: {{ venta.cliente }}</p>
+
+    <div class="linea"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th class="derecha">Cant.</th>
+                <th class="derecha">Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in venta.detalles.all %}
+            <tr>
+                <td>{{ d.producto.nombre }}</td>
+                <td class="derecha">{{ d.cantidad }}</td>
+                <td class="derecha">${{ d.subtotal|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="linea"></div>
+
+    <table>
+        <tr class="total">
+            <td>TOTAL</td>
+            <td class="derecha">${{ venta.total|floatformat:2 }}</td>
+        </tr>
+    </table>
+
+    <div class="linea"></div>
+    <p>¡Gracias por su compra!</p>
+
+    <div class="acciones">
+        <button onclick="window.print()">Imprimir</button>
+        <a href="{% url 'ventas:detalle' venta.pk %}">Volver</a>
+    </div>
+</body>
+</html>
