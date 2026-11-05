@@ -68,5 +68,9 @@
     </table>
 </div>
 
-<a href="{% url 'ventas:lista' %}" class="btn-erp-primary">← Volver</a>
+<div style="display:flex; gap:.75rem; flex-wrap:wrap; align-items:center;">
+    <a href="{% url 'ventas:lista' %}" class="btn-erp-primary">← Volver</a>
+    <a href="{% url 'ventas:ticket' venta.pk %}" class="btn-erp-primary"
+       target="_blank" rel="noopener">🧾 Ver ticket</a>
+</div>
 {% endblock %}
