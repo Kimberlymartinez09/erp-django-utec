@@ -1,36 +1,125 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Ticket #{{ venta.id }}</title>
-  <style>
-    body { font-family: monospace; width: 300px; margin: 20px auto; }
-    h2, p { text-align: center; margin: 4px 0; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    td, th { padding: 2px 0; font-size: 13px; }
-    .right { text-align: right; }
-    hr { border: none; border-top: 1px dashed #000; }
-    @media print { button { display: none; } }
-  </style>
+<meta charset="UTF-8">
+<title>Ticket #{{ venta.pk }}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&display=swap');
+
+  @page {
+    size: 100mm 170mm;
+    margin: 0;
+    background: linear-gradient(160deg, #fff0f7 0%, #ffd9ea 55%, #ffeaf4 100%);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Dancing Script', 'Brush Script MT', 'Georgia', cursive;
+    font-style: italic;
+    color: #c2185b;
+  }
+
+  .card {
+    margin: 5mm;
+    padding: 4mm 5mm;
+    border: 0.6mm dotted #ff6fa5;
+    border-radius: 6mm;
+    background: #ffffff;
+  }
+
+  .sparkles { text-align: center; line-height: 1; margin: 1mm 0; }
+  .sparkles svg { margin: 0 0.8mm; vertical-align: middle; }
+
+  .brand { text-align: center; font-size: 22pt; font-weight: 700; color: #d81b60; margin: 1mm 0 0; }
+  .sub   { text-align: center; font-size: 10pt; color: #ec6fa5; margin: 0; }
+
+  .meta { text-align: center; font-size: 10pt; color: #b0447a; margin: 2mm 0; }
+
+  .line { border-top: 0.5mm dotted #ff9ec7; margin: 2mm 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 10.5pt; }
+  th { text-align: left; color: #ad1457; font-size: 11pt; padding-bottom: 1mm; }
+  td { padding: 0.8mm 0; color: #c2185b; vertical-align: top; }
+  .r { text-align: right; }
+
+  .totales td { font-size: 10.5pt; }
+  .total-final td {
+    font-size: 15pt; font-weight: 700; color: #d81b60;
+    border-top: 0.5mm solid #ff6fa5; padding-top: 1.5mm;
+  }
+
+  .gracias { text-align: center; font-size: 15pt; font-weight: 700; color: #e91e8c; margin: 2mm 0 0; }
+  .nota    { text-align: center; font-size: 9pt; color: #d48ab0; margin: 0; }
+</style>
 </head>
 <body>
-  <h2>TICKET DE VENTA</h2>
-  <p>N.º {{ venta.id }}</p>
-  <p>{{ venta.fecha|date:"d/m/Y H:i" }}</p>
-  <hr>
+<div class="card">
+
+  <!-- Brillitos superiores -->
+  <div class="sparkles">
+    <svg width="14" height="14" viewBox="0 0 20 20"><path fill="#ff4f9a" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="9" height="9" viewBox="0 0 20 20"><path fill="#b388ff" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="16" height="16" viewBox="0 0 20 20"><path fill="#ffc83d" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="10" height="10" viewBox="0 0 20 20"><path fill="#4fc3f7" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="14" height="14" viewBox="0 0 20 20"><path fill="#ff80ab" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="9" height="9" viewBox="0 0 20 20"><path fill="#69f0ae" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="13" height="13" viewBox="0 0 20 20"><path fill="#ffc83d" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+  </div>
+
+  <p class="brand">Kimberly Beauty</p>
+  <p class="sub">boutique de maquillaje</p>
+
+  <div class="meta">
+    Ticket N.º {{ venta.pk }}<br>
+    {{ venta.fecha|date:"d/m/Y H:i" }}<br>
+    Cliente: {{ venta.cliente }}
+  </div>
+
+  <div class="line"></div>
+
   <table>
-    <tr><th>Producto</th><th class="right">Cant.</th><th class="right">Importe</th></tr>
-    {% for item in venta.detalles.all %}
-    <tr>
-      <td>{{ item.producto }}</td>
-      <td class="right">{{ item.cantidad }}</td>
-      <td class="right">{{ item.subtotal }}</td>
-    </tr>
-    {% endfor %}
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th class="r">Cant.</th>
+        <th class="r">Importe</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in venta.detalles.all %}
+      <tr>
+        <td>{{ d.producto.nombre }}</td>
+        <td class="r">{{ d.cantidad }}</td>
+        <td class="r">${{ d.subtotal }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
   </table>
-  <hr>
-  <p><strong>TOTAL: {{ venta.total }}</strong></p>
-  <p>¡Gracias por su compra!</p>
-  <button onclick="window.print()">Imprimir</button>
+
+  <div class="line"></div>
+
+  <table class="totales">
+    <tr><td>Subtotal</td><td class="r">${{ subtotal }}</td></tr>
+    <tr><td>IVA ({{ config.iva_porcentaje }}%)</td><td class="r">${{ iva }}</td></tr>
+    <tr class="total-final"><td>Total</td><td class="r">${{ total_con_iva }}</td></tr>
+  </table>
+
+  <div class="line"></div>
+
+  <p class="gracias">¡Gracias por tu compra!</p>
+  <p class="nota">Eres hermosa tal como eres</p>
+
+  <!-- Brillitos inferiores -->
+  <div class="sparkles">
+    <svg width="9" height="9" viewBox="0 0 20 20"><path fill="#4fc3f7" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="14" height="14" viewBox="0 0 20 20"><path fill="#ff4f9a" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="11" height="11" viewBox="0 0 20 20"><path fill="#ffc83d" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="15" height="15" viewBox="0 0 20 20"><path fill="#b388ff" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="10" height="10" viewBox="0 0 20 20"><path fill="#ff80ab" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="13" height="13" viewBox="0 0 20 20"><path fill="#69f0ae" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+    <svg width="9" height="9" viewBox="0 0 20 20"><path fill="#ffc83d" d="M10 0C11 7 13 9 20 10C13 11 11 13 10 20C9 13 7 11 0 10C7 9 9 7 10 0Z"/></svg>
+  </div>
+
+</div>
 </body>
 </html>

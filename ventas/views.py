@@ -235,3 +235,35 @@ def venta_ticket(request, venta_id: int) -> HttpResponse:
         **calcular_totales(venta.total, config.iva_porcentaje),
     }
     return render(request, "ventas/ticket.html", context)
+
+
+@login_required
+def venta_ticket_pdf(request, venta_id: int) -> HttpResponse:
+    """Ticket estilo boutique de maquillaje, descargable en PDF (WeasyPrint)."""
+    import weasyprint
+
+    venta = get_object_or_404(
+        Venta.objects.select_related("cliente").prefetch_related(
+            "detalles__producto"
+        ),
+        pk=venta_id,
+    )
+    config = ConfiguracionERP.get_instance()
+    context = {
+        "venta": venta,
+        "config": config,
+        "hoy": timezone.localdate(),
+        **calcular_totales(venta.total, config.iva_porcentaje),
+    }
+
+    html_string = render_to_string("ventas/ticket_pdf.html", context, request=request)
+
+    pdf_bytes = weasyprint.HTML(
+        string=html_string,
+        base_url=request.build_absolute_uri("/"),
+        url_fetcher=_url_fetcher_local,
+    ).write_pdf()
+
+    response = HttpResponse(pdf_bytes, content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="ticket_{venta.pk:05d}.pdf"'
+    return response
