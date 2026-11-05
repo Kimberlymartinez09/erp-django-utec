@@ -4,6 +4,7 @@ Inicio: index (W02).
 Lectura: VentaListView y VentaDetailView (W07).
 Escritura: crear_venta (decoradores, W09) y VentaDeleteView (W08).
 PDF: venta_pdf con WeasyPrint (W12).
+Ticket: venta_ticket (HTML imprimible).
 """
 import mimetypes
 from decimal import ROUND_HALF_UP, Decimal
@@ -213,3 +214,24 @@ def venta_pdf(request, venta_id: int) -> HttpResponse:
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="factura_{venta.pk:05d}.pdf"'
     return response
+
+
+# ── Ticket imprimible ──────────────────────────────────────────────────
+
+@login_required
+def venta_ticket(request, venta_id: int) -> HttpResponse:
+    """Muestra el ticket de una venta en HTML listo para imprimir."""
+    venta = get_object_or_404(
+        Venta.objects.select_related("cliente").prefetch_related(
+            "detalles__producto"
+        ),
+        pk=venta_id,
+    )
+    config = ConfiguracionERP.get_instance()
+    context = {
+        "venta": venta,
+        "config": config,
+        "hoy": timezone.localdate(),
+        **calcular_totales(venta.total, config.iva_porcentaje),
+    }
+    return render(request, "ventas/ticket.html", context)
