@@ -356,6 +356,12 @@
 <nav class="erp-navbar">
     <a class="erp-brand" href="/"><span class="bow"></span> Hello Kimberly <span class="sub">· UTEC Celaya</span></a>
     <div class="erp-nav-links">
+        <!-- E-commerce público — W13 -->
+        <a href="{% url 'catalogo:catalogo' %}" class="erp-nav-link {% block nav_catalogo %}{% endblock %}">🛍️ Tienda</a>
+        <!-- Contador del carrito en la navbar -->
+        {% if carrito_total_items > 0 %}
+        <a href="{% url 'catalogo:carrito' %}" class="erp-nav-link" style="position:relative;">🛒 ({{ carrito_total_items }})</a>
+        {% endif %}
         <a href="/productos/" class="erp-nav-link {% block nav_productos %}{% endblock %}">Productos</a>
         <a href="/clientes/" class="erp-nav-link {% block nav_clientes %}{% endblock %}">Clientes</a>
         <a href="/proveedores/" class="erp-nav-link {% block nav_proveedores %}{% endblock %}">Proveedores</a>

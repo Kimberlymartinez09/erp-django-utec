@@ -1,0 +1,15 @@
+﻿<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Catalogo</title></head><body>
+<h1>Catalogo</h1>
+<form method="get">
+<input type="text" name="nombre" value="{{ request.GET.nombre }}">
+<input type="number" name="precio_max" value="{{ request.GET.precio_max }}">
+<button type="submit">Filtrar</button></form>
+<p><a href="{% url 'catalogo:carrito' %}">Ver carrito</a></p>
+<ul>
+{% for p in object_list %}
+<li><strong>{{ p.nombre }}</strong> - ${{ p.precio }}
+<form method="post" action="{% url 'catalogo:agregar' p.id %}" style="display:inline">{% csrf_token %}<button type="submit">Agregar</button></form></li>
+{% empty %}<li>No hay productos.</li>
+{% endfor %}
+</ul></body></html>
